@@ -1,0 +1,17 @@
+Queue
+    Where it's used
+        - BFS
+        - Store most recent items...
+        - Waiting lines
+        - Web serevr request management
+
+
+Priority Queue
+     Where it's used
+            -Graphs
+     LOOK OUT FOR -
+        - remove()
+            Bubbling down - Child / sibling inside range
+        - add()
+            getSibling check in range
+        - Go for 1 based index

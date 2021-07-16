@@ -1,0 +1,24 @@
+LinkedLists :
+   Sequential list of nodes with a head pointer
+
+   Used in
+    ADT implementations for List, Queue, Stack
+    Hash Table with chaining
+    Graph Adjacency list
+
+   Types
+                    Pro                         Cons
+     Singly -   Simpler to implement    Cannot reach prev node
+     Doubly -   More use-cases          2x memory
+                such as add/remove in
+                O(1)
+
+   Complexity
+                                  Singly             Doubly
+     Search                        O(N)                 O(N)
+     Insert at head                O(1)                 O(1)
+     Insert at tail                O(1)                 O(1)
+     Delete at head                O(1)                 O(1)
+     Delete at tail                O(N)                 O(1)
+     Insert                        O(N)                 O(N)
+     Delete                        O(N)                O(N)

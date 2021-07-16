@@ -1,0 +1,16 @@
+Arrays
+   Used in
+        I/O ops as buffers
+        Dynamic Programming caching results
+
+   Types
+     Static - fixed length
+        add     O(1)
+        remove  O(1)
+        update  O(1)
+     Dynamic - can modify length later
+        add     O(1)
+        remove  O(N)
+        update  O(1)
+
+
