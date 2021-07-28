@@ -18,16 +18,22 @@ public class SuffixTree {
         Arrays.sort(suffixes);
     }
 
-    private int commonPrefixLength(String s1, String s2){
-        if (Objects.isNull(s1) || Objects.isNull(s2)){
+    private int commonPrefixLength(String s1, String s2) {
+        if (Objects.isNull(s1) || Objects.isNull(s2)) {
             return 0;
-        }else {
-            int i = 0;
-            int j = 0;
-            while (i < s1.length() && j < s2.length()){
-                    s1.
+        } else {
+            int res = 0;
+            int minLength = Math.min(s1.length(), s2.length());
+            for (int i = 0; i < minLength; i++) {
+                if (s1.charAt(i) == s2.charAt(1)) {
+                    res++;
+                } else {
+                    break;
+                }
             }
+            return res;
         }
+
     }
 
     @Override
