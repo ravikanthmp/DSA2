@@ -39,4 +39,17 @@ public class Util {
         }
         return true;
     }
+
+    public static boolean isSorted(int[] ints){
+        int prev = ints[0];
+        int curr;
+        for (int i = 1; i < ints.length; i++) {
+            curr = ints[i];
+            if (curr < prev){
+                return false;
+            }
+            prev = curr;
+        }
+        return true;
+    }
 }

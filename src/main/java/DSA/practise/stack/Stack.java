@@ -2,8 +2,11 @@ package DSA.practise.stack;
 
 import DSA.practise.linkedlists.DoublyLinkedList;
 
-public class Stack<T> {
-    DoublyLinkedList<T> internalList = new DoublyLinkedList<T>();
+import java.util.Iterator;
+import java.util.LinkedList;
+
+public class Stack<T> implements Iterable<T>{
+    LinkedList<T> internalList = new LinkedList<T>();
 
     public void push(T item){
         internalList.addLast(item);
@@ -31,4 +34,9 @@ public class Stack<T> {
    public Integer size(){
         return internalList.size();
    }
+
+    @Override
+    public Iterator<T> iterator() {
+        return internalList.iterator();
+    }
 }
