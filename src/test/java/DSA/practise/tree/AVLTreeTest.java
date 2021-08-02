@@ -76,7 +76,7 @@ class AVLTreeTest {
         return result;
     }
 
-    private int[] randomArr(int N){
+    public static int[] randomArr(int N){
         int[] arr = new int[N];
         for (int i = 0; i < arr.length; i++) {
             arr[i] = (int)(Math.random() * N);

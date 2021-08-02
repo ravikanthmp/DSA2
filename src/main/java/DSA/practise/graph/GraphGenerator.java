@@ -1,17 +1,46 @@
 package DSA.practise.graph;
 
-import java.io.BufferedReader;
-import java.io.IOException;
-import java.io.InputStream;
-import java.io.InputStreamReader;
-import java.net.URI;
+import java.io.*;
 import java.net.URISyntaxException;
 import java.net.URL;
-import java.nio.file.Files;
-import java.nio.file.Path;
-import java.util.List;
+import java.util.Scanner;
 
 public class GraphGenerator {
+
+    private static final String CHARSET_NAME = "UTF-8";
+
+    public static Graph graph(String url) throws IOException, URISyntaxException {
+
+        URL urlObj = new URL(url);
+        InputStream inputStream = urlObj.openStream();
+        BufferedReader bufferedReader = new BufferedReader(
+                new InputStreamReader(inputStream)
+        );
+        Integer V = Integer.valueOf(bufferedReader.readLine());
+        Integer E = Integer.valueOf(bufferedReader.readLine());
+        Graph graph = new Graph(V);
+        for (int i = 0; i < E; i++) {
+            String[] split = bufferedReader.readLine().split(" ");
+            graph.addEdge(Integer.valueOf(split[0]), Integer.valueOf(split[1]));
+        }
+        return graph;
+    }
+
+    public static DiGraph diGraph(String url) throws IOException, URISyntaxException {
+
+        URL urlObj = new URL(url);
+        InputStream inputStream = urlObj.openStream();
+        Scanner scanner  = new Scanner(new BufferedInputStream(inputStream), CHARSET_NAME);
+
+        Integer V = scanner.nextInt();
+        Integer E = scanner.nextInt();
+        DiGraph graph = new DiGraph(V);
+        for (int i = 0; i < E; i++) {
+            graph.addEdge(scanner.nextInt(), scanner.nextInt());
+        }
+        return graph;
+    }
+
     public static WeightedGraph weightedGraph(String url) throws IOException, URISyntaxException {
 
         URL urlObj = new URL(url);
