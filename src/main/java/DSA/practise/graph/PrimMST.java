@@ -1,8 +1,6 @@
-package DSA.practise.queue;
+package DSA.practise.graph;
 
-import DSA.practise.graph.GraphGenerator;
-import DSA.practise.graph.WeightedEdge;
-import DSA.practise.graph.WeightedGraph;
+import DSA.practise.queue.IndexedPriorityQueue;
 import DSA.practise.stack.Stack;
 
 import java.io.IOException;
