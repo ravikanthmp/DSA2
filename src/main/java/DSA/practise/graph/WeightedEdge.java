@@ -7,6 +7,10 @@ public class WeightedEdge extends Edge implements Comparable<WeightedEdge> {
         this.weight = w;
     }
 
+    public int other(int u){
+        return u == this.u ? this.v : this.u;
+    }
+
     public double weight(){
         return weight;
     }

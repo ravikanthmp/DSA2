@@ -1,10 +1,9 @@
 package DSA.practise.queue;
 
 import DSA.practise.graph.GraphGenerator;
+import DSA.practise.graph.PrimMST;
 import DSA.practise.graph.WeightedEdge;
 import DSA.practise.graph.WeightedGraph;
-import org.junit.Assert;
-import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 
 import java.util.List;

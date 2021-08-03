@@ -103,7 +103,7 @@ public class PriorityQueue<T extends Comparable<T>> implements Iterable<T>{
         return removed;
     }
 
-    private boolean isEmpty() {
+    public boolean isEmpty() {
         return internalList.isEmpty();
     }
 
