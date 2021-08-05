@@ -6,8 +6,9 @@ import java.util.LinkedList;
 import java.util.Stack;
 
 public class TopologicalSort {
+    private DirectedWeightedGraph directedWeightedGraph;
     private DiGraph diGraph;
-    private final boolean hasCycle;
+    private boolean hasCycle;
     private boolean[] visited;
     private int[] edgeTo;
     LinkedList<Integer> postOrder;
@@ -22,7 +23,7 @@ public class TopologicalSort {
         if (!hasCycle){
             for (int i = 0; i < diGraph.V(); i++) {
                 if (!visited[i]){
-                    dfs(i);
+                    dfs(diGraph, i);
                 }
             }
         }
@@ -30,11 +31,36 @@ public class TopologicalSort {
 
     }
 
-    private void dfs(int u) {
+    public TopologicalSort(DirectedWeightedGraph diGraph) {
+        this.directedWeightedGraph = diGraph;
+        visited = new boolean[diGraph.V()];
+        edgeTo =  new int[diGraph.V()];
+        postOrder = new LinkedList<>();
+        for (int i = 0; i < diGraph.V(); i++) {
+            if (!visited[i]){
+                dfs(directedWeightedGraph, i);
+            }
+        }
+
+
+    }
+    private void dfs(DiGraph diGraph, int u) {
         visited[u] = true;
         for(int v : diGraph.adj(u)){
             if (!visited[v]){
-                dfs(v);
+                dfs(diGraph, v);
+                edgeTo[v] = u;
+            }
+        }
+        postOrder.add(u);
+    }
+
+    private void dfs(DirectedWeightedGraph directedWeightedGraph, int u) {
+        visited[u] = true;
+        for(DirectedWeightedEdge edge : directedWeightedGraph.adj(u)){
+            int v = edge.to();
+            if (!visited[v]){
+                dfs(directedWeightedGraph, v);
                 edgeTo[v] = u;
             }
         }
@@ -45,7 +71,7 @@ public class TopologicalSort {
         if (hasCycle){
             throw new RuntimeException("No topological sort as the Digraph has cycle.");
         }
-        Stack<Integer> stack = new Stack<>();
+        Deque<Integer> stack = new ArrayDeque<>();
         for (Integer v : postOrder) {
             stack.push(v);
         }
