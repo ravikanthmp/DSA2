@@ -41,6 +41,21 @@ public class GraphGenerator {
         return graph;
     }
 
+    public static DirectedWeightedGraph directedWeightedGraph(String url) throws IOException, URISyntaxException {
+
+        URL urlObj = new URL(url);
+        InputStream inputStream = urlObj.openStream();
+        Scanner scanner  = new Scanner(new BufferedInputStream(inputStream), CHARSET_NAME);
+
+        Integer V = scanner.nextInt();
+        Integer E = scanner.nextInt();
+        DirectedWeightedGraph graph = new DirectedWeightedGraph(V);
+        for (int i = 0; i < E; i++) {
+            graph.addEdge(scanner.nextInt(), scanner.nextInt(), scanner.nextDouble());
+        }
+        return graph;
+    }
+
     public static WeightedGraph weightedGraph(String url) throws IOException, URISyntaxException {
 
         URL urlObj = new URL(url);
