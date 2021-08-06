@@ -1,5 +1,6 @@
 package DSA.practise.dp;
 
+import java.lang.reflect.Parameter;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Objects;
@@ -46,10 +47,6 @@ public class GridTraveller {
         res = num(Pair.of(0, 0));
     }
 
-    /*
-        fib(0) = 0
-        fib(1) = 1
-         */
     private Long num(Pair pair) {
 
         if (dp.containsKey(pair)){
@@ -58,8 +55,9 @@ public class GridTraveller {
 
         int x = pair.x;
         int y = pair.y;
-        if (x < 0 || y < 0) {
-            return Long.valueOf(0);
+
+        if (!isValid(pair)){
+            return 0L;
         }
 
         if ((x == (M - 1)) && (y == (N - 1))) {
@@ -68,33 +66,19 @@ public class GridTraveller {
 
         Long res = 0L;
 
-        boolean canGoDown = x < M - 1;
-        if (canGoDown) {
-            Long downRes = 0L;
-            Pair down = Pair.of(x + 1, y);
-            if (dp.containsKey(down)) {
-                downRes = dp.get(down);
-            } else {
-                downRes = num(down);
-            }
-            res += downRes;
-        }
-        boolean canGoRight = y < N - 1;
-        if (canGoRight){
-            Pair right = Pair.of(x, y + 1);
-            long rightRes = 0L;
-            if (dp.containsKey(right)){
-                rightRes = dp.get(rightRes);
-            }else {
-                rightRes = num(right);
-            }
-            res += rightRes;
-        }
+        res += num(Pair.of(x + 1, y));
+        res += num(Pair.of(x, y + 1));
 
         dp.put(pair, res);
         return dp.get(pair);
 
 
+    }
+
+    private boolean isValid(Pair pair){
+        int x = pair.x;
+        int y = pair.y;
+        return (x >= 0 && x < M) && (y >=0 && y < N);
     }
 
     public Long numberOfWays(){
