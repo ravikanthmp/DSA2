@@ -8,37 +8,61 @@ public class AllConstruct {
 
     private final String[] arr;
     private final String target;
-    private ArrayList<List<String>> results = new ArrayList<>();
-    Map<String, Boolean> memo = new HashMap<>();
+    private List<List<String>> results = new ArrayList<>();
+    Map<String, List<List<String>>> memo = new HashMap<>();
 
     public AllConstruct(String[] arr, String target) {
         this.arr = arr;
         this.target = target;
+        this.results = allConstruct(0);
     }
 
-    private void allConstruct(int idx, List<String> solnSoFar){
+    private List<List<String>> allConstruct(int idx){
+        if (idx > target.length()) {
+            return Collections.EMPTY_LIST;
+        }
+        List<List<String >> resultList = new ArrayList<>();
+
         if (idx == target.length()){
-            results.add(List.copyOf(solnSoFar));
-        }else if (idx > target.length()){
-            return;
+            ArrayList<String> list = new ArrayList<>();
+            list.add("");
+            resultList.add(list);
+            return resultList;
         }
 
         String suffix = target.substring(idx);
         if (memo.containsKey(suffix)){
-            boolean canConstructSuffix = memo.get(suffix);
-            if (canConstructSuffix){
-                List<String> strings = new ArrayList<>(solnSoFar);
-                strings.add(suffix);
-                results.add(strings);
-            }
-        }else {
-            for (String word : arr) {
-                if (suffix.startsWith(word)){
-                    solnSoFar.add(word);
-                    allConstruct(idx + word.length(), solnSoFar);
-                    solnSoFar.remove(solnSoFar.size() - 1);
+            return new ArrayList(memo.get(suffix));
+        }
+
+        for (String word : arr) {
+            if (suffix.startsWith(word)){
+                List<List<String>> list = allConstruct(idx + word.length());
+                if (!list.isEmpty()){
+                    for (List<String> subResult : list) {
+                        subResult.add(0, word);
+                        resultList.add(subResult);
+                    }
                 }
             }
+        }
+
+        memo.put(suffix, resultList);
+        return new ArrayList(memo.get(suffix));
+    }
+
+    public List<List<String>> getResults(){
+        return results;
+    }
+
+    public static void main(String[] args) {
+//        String[] arr = {"ab", "abc", "cd", "def", "abcd", "ef", "c"};
+        String[] arr = {"abc", "def", "ab", "c", "de", "f"};
+        String target = "abcdef";
+
+        AllConstruct allConstruct = new AllConstruct(arr, target);
+        for (List<String> result : allConstruct.getResults()) {
+            System.out.println(result);
         }
 
 
