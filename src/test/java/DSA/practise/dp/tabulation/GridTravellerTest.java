@@ -1,8 +1,10 @@
-package DSA.practise.dp;
+package DSA.practise.dp.tabulation;
 
-import DSA.practise.dp.memoization.GridTraveller;
+import DSA.practise.dp.tabulation.GridTraveller;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
+
+import static org.junit.jupiter.api.Assertions.*;
 
 class GridTravellerTest {
 
@@ -21,4 +23,5 @@ class GridTravellerTest {
         Assertions.assertEquals(gridTraveller.numberOfWays(), 2333606220l);
 
     }
+
 }
