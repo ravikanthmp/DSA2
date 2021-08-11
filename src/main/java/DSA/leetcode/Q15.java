@@ -39,13 +39,13 @@ public class Q15 {
 
     private int next(int[] nums, int i) {
 
-        int resultIdx = -1;
-        for (int j = i + 1; j < nums.length; j++) {
+        int j = -1;
+        for ( j = i + 1; j < nums.length; j++) {
             if (nums[j] > nums[i]){
                 return j;
             }
         }
-        return resultIdx;
+        return j;
     }
 
     private boolean inRange(int[] nums, int i){
@@ -53,14 +53,14 @@ public class Q15 {
     }
 
     private int previous(int[] nums, int i){
-        int resultIdx = -1;
-        for (int j = i - 1; j >= 0 ; j--) {
+        int j = -1;
+        for ( j = i - 1; j >= 0 ; j--) {
             if (nums[j] < nums[i]){
                 return j;
             }
         }
 
-        return resultIdx;
+        return j;
     }
 
     public static void main(String[] args) {
