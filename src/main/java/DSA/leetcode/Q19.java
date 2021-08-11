@@ -23,25 +23,36 @@ public class Q19 {
     }
 
     public ListNode removeNthFromEnd(ListNode head, int n) {
-        int N = length(head);
+
 
         if (Objects.isNull(head)){
             return null;
         }
 
-        if (n == N){
-            // remove head;
+        ListNode ptr1 = head;
+        ListNode ptr2 = head;
+        int gap = 0;
+        for(ptr2 = head; ptr2.next != null && gap != n; ptr2 = ptr2.next){
+            gap++;
+        }
+
+        if (gap < n){
             head = head.next;
             return head;
         }
 
-        int x = N - n - 1;
-        ListNode curr = head;
-        for (int i = 0; i < x; i++) {
-            curr = curr.next;
+        while (next(ptr2) != null){
+            ptr2 = next(ptr2);
+            ptr1 = next(ptr1);
         }
-        curr.next = curr.next.next;
+        ptr1.next = next(ptr1.next);
         return head;
+
+
+    }
+
+    private ListNode next(ListNode node){
+        return Objects.isNull(node) ? null : node.next;
     }
 
     private int length(ListNode node){
