@@ -19,7 +19,7 @@ public class Q15 {
         Arrays.sort(nums);
 
         List<List<Integer>> resultList = new ArrayList<>();
-        for (int i = 0; i < nums.length - 2 && inRange(nums, i); i = next(nums, i)) {
+        for (int i = 0; i < nums.length - 2 && inRange(nums, i) && nums[i] <= 0; i = next(nums, i)) {
             int j = i + 1;
             int k = nums.length - 1;
             while (j < k && inRange(nums, j) && inRange(nums, k)){
@@ -38,17 +38,11 @@ public class Q15 {
     }
 
     private int next(int[] nums, int i) {
-        int el = nums[i] + 1;
+
         int resultIdx = -1;
-        int lo = i + 1;
-        int hi = nums.length - 1;
-        while (lo <= hi) {
-            int mid = lo + (hi - lo) / 2;
-            if (nums[mid] >= el) {
-                resultIdx = mid;
-                hi = mid - 1;
-            } else if (nums[mid] < el) {
-                lo = mid + 1;
+        for (int j = i + 1; j < nums.length; j++) {
+            if (nums[j] > nums[i]){
+                return j;
             }
         }
         return resultIdx;
@@ -59,19 +53,13 @@ public class Q15 {
     }
 
     private int previous(int[] nums, int i){
-        int el = nums[i] - 1;
         int resultIdx = -1;
-        int lo = 0;
-        int hi = i - 1;
-        while (lo <= hi) {
-            int mid = lo + (hi - lo) / 2;
-            if (nums[mid] <= el) {
-                resultIdx = mid;
-                lo = mid + 1;
-            } else {
-                hi = mid - 1;
+        for (int j = i - 1; j >= 0 ; j--) {
+            if (nums[j] < nums[i]){
+                return j;
             }
         }
+
         return resultIdx;
     }
 
