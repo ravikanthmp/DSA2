@@ -1,9 +1,8 @@
 package DSA.practise.dp;
 
+import DSA.practise.dp.memoization.CanConstructV2FollowingTemplate;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
-
-import static org.junit.jupiter.api.Assertions.*;
 
 class CanConstructV2FollowingTemplateTest {
 

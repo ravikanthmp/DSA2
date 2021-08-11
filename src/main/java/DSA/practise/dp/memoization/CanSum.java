@@ -1,9 +1,7 @@
-package DSA.practise.dp;
+package DSA.practise.dp.memoization;
 
 import java.util.HashMap;
-import java.util.HashSet;
 import java.util.Map;
-import java.util.Set;
 
 public class CanSum {
 
