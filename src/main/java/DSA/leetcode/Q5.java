@@ -2,6 +2,10 @@ package DSA.leetcode;
 
 public class Q5 {
 
+    /**
+     * Time : O(N^2)
+     * Space : O(N^2)
+     */
     public String longestPalindrome(String s){
         boolean[][] dp = new boolean[s.length() + 1][s.length()];
         int maxSoFar = 1;
