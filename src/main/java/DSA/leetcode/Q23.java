@@ -1,6 +1,9 @@
 package DSA.leetcode;
 
-import java.util.Objects;
+import java.util.Arrays;
+import java.util.Comparator;
+
+import java.util.PriorityQueue;
 
 public class Q23 {
 
@@ -22,49 +25,32 @@ public class Q23 {
     }
     
     public ListNode mergeKLists(ListNode[] lists) {
-        return mergeKLists(lists, 0, lists.length - 1);
-    }
+        Comparator<ListNode> nodeComparator = Comparator.comparingInt(l -> l.val);
+        PriorityQueue<ListNode> pq = new PriorityQueue<>(nodeComparator);
 
-    private ListNode mergeKLists(ListNode[] lists, int lo, int hi) {
-        if (lo > hi){
-            return null;
+        // init
+        for (ListNode list : lists) {
+            if (list != null) {
+                pq.add(list);
+            }
         }
-        if (lo == hi){
-            return lists[lo];
-        }
-        if (hi == lo + 1){
-            return merge2Lists(lists[lo], lists[hi]);
-        }
-        int mid = lo + (hi - lo)/2;
-        ListNode listNode1 = mergeKLists(lists, lo, mid);
-        ListNode listNode2 = mergeKLists(lists, mid + 1, hi);
-        return merge2Lists(listNode1, listNode2);
-    }
 
-
-    private ListNode merge2Lists(ListNode l1, ListNode l2){
+        // keep removing
         ListNode dummy = new ListNode();
         ListNode curr = dummy;
-        while (l1 != null || l2 != null){
-            if (l1 == null){
-                curr.next = l2;
-                l2 = l2.next;
-            }else if (l2 == null){
-                curr.next = l1;
-                l1 = l1.next;
-            }else {
-                int cmp = Integer.compare(l1.val, l2.val);
-                if (cmp <= 0){
-                    curr.next = l1;
-                    l1 = l1.next;
-                }else {
-                    curr.next = l2;
-                    l2 = l2.next;
-                }
-            }
+
+        while (!pq.isEmpty()){
+            ListNode min = pq.remove();
+            curr.next = min;
             curr = curr.next;
+
+            if (min.next != null){
+                pq.add(min.next);
+            }
         }
+
         return dummy.next;
     }
+
 
 }
