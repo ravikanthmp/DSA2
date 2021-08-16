@@ -2,21 +2,17 @@ package DSA.leetcode;
 
 public class Q55 {
 
-    private boolean[] memo;
 
     public boolean canJump(int[] nums) {
-        memo = new boolean[nums.length];
-        memo[nums.length - 1] = true;
-        for (int i = nums.length - 2; i >= 0; i--) {
+        int leftMostReachable = nums.length - 1;
+        for (int i = nums.length - 2; i > 0; i--) {
             int farthest = Math.min(nums.length - 1, i + nums[i]);
-            for (int j = i + 1; j <= farthest; j++) {
-                if (memo[j]){
-                    memo[i] = true;
-                    break;
-                }
+            if (farthest >= leftMostReachable){
+                leftMostReachable = i;
             }
         }
-        return memo[0];
+        int farthest = Math.min(nums.length - 1, nums[0]);
+        return farthest >= leftMostReachable;
     }
 
     public static void main(String[] args) {

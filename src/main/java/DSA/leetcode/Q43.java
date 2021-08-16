@@ -1,39 +1,38 @@
 package DSA.leetcode;
 
 import java.util.Arrays;
+import java.util.LinkedList;
+import java.util.Queue;
 
 public class Q43 {
 
     private int[] nums;
-    private Integer[] memo;
+    private boolean[] visited;
+    private int[] distTo;
 
     public int jump(int[] nums) {
-        this.nums = nums;
-        this.memo = new Integer[nums.length];
-        memo[nums.length - 1] = 0;
-        jump(0);
-        return memo[0];
-    }
+        this.visited = new boolean[nums.length];
+        visited[0] = true;
+        Queue<Integer> queue = new LinkedList<>();
+        Queue<Integer> temp = new LinkedList<>();
+        distTo = new int[nums.length];
+        distTo[0] = 0;
+        queue.add(0);
+        while (!queue.isEmpty()) {
 
-    private int jump(int idx) {
-        int target = nums.length - 1;
-        if (idx >= target) {
-            return 0;
-        } else {
-            if (memo[idx] == null) {
-                int ans = Integer.MAX_VALUE;
-                int jumps = nums[idx];
+            Integer el = queue.remove();
 
-                for (int i = 1; i <= jumps; i++) {
-                    int ans2 = jump(idx + i);
-                    if (ans2 != Integer.MAX_VALUE) {
-                        ans = Math.min(ans, 1 + ans2);
-                    }
+            int farthest = Math.min(nums[el] + el, nums.length - 1);
+            for (int i = el + 1; i <= farthest ; i++) {
+                if (!visited[i]){
+                    visited[i] = true;
+                    distTo[i] = distTo[el] + 1;
+                    queue.add(i);
                 }
-                memo[idx] = ans;
             }
-            return memo[idx];
         }
+
+        return distTo[nums.length - 1];
     }
 
     public static void main(String[] args) {
