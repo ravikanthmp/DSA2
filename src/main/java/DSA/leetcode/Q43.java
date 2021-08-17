@@ -1,43 +1,31 @@
 package DSA.leetcode;
 
-import java.util.Arrays;
 
 public class Q43 {
 
-    private int[] nums;
-    private Integer[] memo;
 
     public int jump(int[] nums) {
-        this.nums = nums;
-        this.memo = new Integer[nums.length];
-        memo[nums.length - 1] = 0;
-        jump(0);
-        return memo[0];
-    }
 
-    private int jump(int idx){
-        int target = nums.length - 1;
-        if (idx >= target){
-            return 0;
-        }else {
-            if (memo[idx] == null){
-                int ans = Integer.MAX_VALUE;
-                int jumps = nums[idx];
+        int currLevelEnd = nums[0];
+        int nextLevelEnd = 0;
+        int steps = 1;
+        for (int i = 1; i < nums.length ; i++) {
 
-                for(int i = 1; i <= jumps; i++ ){
-                    int ans2 =  jump(idx + i);
-                    if(ans2 != Integer.MAX_VALUE){
-                        ans = Math.min(ans, 1 + ans2);
-                    }
+            if (i == currLevelEnd){
+                if (i != nums.length - 1){
+                    steps++;
                 }
-                memo[idx] = ans;
+                currLevelEnd = nextLevelEnd;
+                nextLevelEnd = 0;
+            }else {
+                nextLevelEnd = Math.max(nextLevelEnd, i + nums[i]);
             }
-            return memo[idx];
         }
+        return steps;
     }
 
     public static void main(String[] args) {
-        int[] arr = {0};
+        int[] arr = {1, 1, 1, 1};
         Q43 test = new Q43();
         System.out.println(test.jump(arr));
     }
