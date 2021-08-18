@@ -2,7 +2,10 @@ package DSA.leetcode;
 
 public class Q72 {
 
+    private Integer[][] memo;
+
     public int minDistance(String word1, String word2) {
+        memo = new Integer[word1.length()][word2.length()];
         return minDistance(word1, word2, 0, 0);
     }
 
@@ -15,6 +18,10 @@ public class Q72 {
             return word1.length() - idx1;
         }else {
 
+            // check memo
+            if (memo[idx1][idx2] != null){
+                return memo[idx1][idx2];
+            }
             // replace
             int ans = Integer.MAX_VALUE;
             ans = Math.min(ans,
@@ -27,7 +34,8 @@ public class Q72 {
                             minDistance(word1, word2, idx1, idx2 + 1))
             );
 
-            return ans;
+            memo[idx1][idx2] = ans;
+            return memo[idx1][idx2];
         }
     }
 
