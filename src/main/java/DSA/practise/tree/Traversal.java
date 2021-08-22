@@ -49,26 +49,23 @@ public class Traversal {
         TreeNode curr = root;
         List<Integer> results = new ArrayList<>();
         Stack<TreeNode> stack = new Stack<>();
-        while (curr != null){
-            results.add(curr.val);
+        if (curr != null){
             stack.push(curr);
-            curr = curr.left;
         }
         while (!stack.isEmpty()){
             curr = stack.pop();
+            results.add(curr.val);
             if (curr.right != null){
-                curr = curr.right;
-                while (curr != null){
-                    results.add(curr.val);
-                    stack.push(curr);
-                    curr = curr.left;
-                }
+               stack.push(curr.right);
+            }
+            if (curr.left != null){
+                stack.push(curr.left);
             }
         }
         return results;
     }
 
-    private List<Integer> postorderTraversal(TreeNode root) {
+    public List<Integer> postorderTraversal(TreeNode root) {
         TreeNode curr = root;
         List<Integer> results = new ArrayList<>();
         Stack<TreeNode> stack = new Stack<>();
@@ -77,17 +74,27 @@ public class Traversal {
             curr = curr.left;
         }
 
+        TreeNode last = null;
         while (!stack.isEmpty()){
-            curr = stack.pop();
+            curr = stack.peek();
+
             Integer val = curr.val;
             if (curr.right != null){
-                curr = curr.right;
-                while (curr != null){
-                    stack.push(curr);
-                    curr = curr.left;
+                if (last != null && last == curr.right){
+                    last = stack.pop();
+                    results.add(last.val);
+                }else {
+                    curr = curr.right;
+                    while (curr != null){
+                        stack.push(curr);
+                        curr = curr.left;
+                    }
                 }
+
+            }else {
+                last = stack.pop();
+                results.add(last.val);
             }
-            results.add(val);
         }
         return results;
     }
