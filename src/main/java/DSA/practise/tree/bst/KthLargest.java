@@ -65,14 +65,14 @@ public class KthLargest {
 
         TreeNode curr = root;
         while (curr != null){
-            int m = size(curr.right);
-            if (m == k - 1){
+            int order = size(curr.right) + 1;
+            if (order == k){
                 break;
-            }else if (k <= m){
-                curr = curr.right;
-            }else {
-                k = k - m - 1;
+            }else if (k > order){
+                k = k - (size(curr.right) + 1);
                 curr = curr.left;
+            }else {
+                curr = curr.right;
             }
         }
 
