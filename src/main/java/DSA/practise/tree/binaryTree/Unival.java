@@ -1,4 +1,4 @@
-package DSA.practise.tree;
+package DSA.practise.tree.binaryTree;
 
 // TODO: 8/22/21
 public class Unival {

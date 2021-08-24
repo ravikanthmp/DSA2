@@ -1,4 +1,4 @@
-package DSA.practise.tree;
+package DSA.practise.tree.binaryTree;
 
 public class PathSum {
 

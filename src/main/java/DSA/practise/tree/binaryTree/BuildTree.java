@@ -1,23 +1,4 @@
-package DSA.practise.tree;
-
-class TreeNode {
-    int val;
-    TreeNode left;
-    TreeNode right;
-
-    TreeNode() {
-    }
-
-    TreeNode(int val) {
-        this.val = val;
-    }
-
-    TreeNode(int val, TreeNode left, TreeNode right) {
-        this.val = val;
-        this.left = left;
-        this.right = right;
-    }
-}
+package DSA.practise.tree.binaryTree;
 
 
 public class BuildTree {
@@ -31,7 +12,8 @@ public class BuildTree {
             return buildTreeInorderPostorder(inorder, postorder, 0, inorder.length - 1,
                     0, postorder.length - 1);
         }else {
-
+            return buildTreeInorderPreorder(inorder, postorder, 0, inorder.length - 1,
+                    0, postorder.length - 1);
         }
 
     }
@@ -89,7 +71,19 @@ public class BuildTree {
         if (inLo > inHi || preLo > preHi){
             return null;
         }else {
+            int rootEl = preorder[preLo];
+            int rootIdxInInorder = search(inorder, inLo, inHi, rootEl);
+            int leftSubTreeSize = rootIdxInInorder - inLo ;
+            TreeNode node = new TreeNode(rootEl);
+            node.left = buildTreeInorderPreorder(inorder, preorder,
+                    inLo, rootIdxInInorder - 1,
+                    preLo + 1, preLo + leftSubTreeSize);
 
+            node.right = buildTreeInorderPreorder(inorder, preorder,
+                    rootIdxInInorder + 1, inHi,
+                    preLo + leftSubTreeSize + 1, preHi) ;
+
+            return node;
         }
     }
 
@@ -97,6 +91,6 @@ public class BuildTree {
         int[] inorder = {9,3,15,20,7};
         int[] postorder = {9,15,7,20,3};
         BuildTree buildTree = new BuildTree();
-        TreeNode treeNode = buildTree.buildTree(inorder, postorder);
+        TreeNode treeNode = buildTree.buildTreeInorderPreorder(inorder, postorder);
     }
 }
