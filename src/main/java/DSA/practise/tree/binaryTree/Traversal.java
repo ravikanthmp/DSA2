@@ -1,11 +1,11 @@
-package DSA.practise.tree;
+package DSA.practise.tree.binaryTree;
 
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Stack;
 
-import static DSA.practise.tree.Traversal.TYPE.POSTORDER;
-import static DSA.practise.tree.Traversal.TYPE.PREORDER;
+import static DSA.practise.tree.binaryTree.Traversal.TYPE.POSTORDER;
+import static DSA.practise.tree.binaryTree.Traversal.TYPE.PREORDER;
 
 public class Traversal {
     enum TYPE {
