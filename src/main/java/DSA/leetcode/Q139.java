@@ -26,12 +26,16 @@ public class Q139 {
             if (res == null){
 
                 boolean ans = false;
-                for (int i = idx; i < s.length(); i++) {
-                    if (wordDict.contains(s.substring(idx, i + 1 ))){
-                        boolean recurse = wordBreak(i + 1 );
-                        if (recurse){
-                            ans = true;
-                            break;
+
+                for (String word : wordDict){
+                    int remainingLetters = s.length() - idx;
+                    if (word.length() <= remainingLetters){
+                        if (s.substring(idx, idx + word.length()).equals(word)){
+                            boolean recurse = wordBreak(idx + word.length());
+                            if (recurse){
+                                ans = true;
+                                break;
+                            }
                         }
                     }
                 }
