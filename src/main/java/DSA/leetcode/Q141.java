@@ -17,14 +17,23 @@ public class Q141 {
 
     public boolean hasCycle(ListNode head) {
 
-        Set<ListNode> visited = new HashSet<>();
-        for (ListNode curr = head; curr != null; curr = curr.next){
-            if (visited.contains(curr)){
+        ListNode fast = next(next(head));
+        ListNode slow = head;
+        while (fast != null){
+            if (fast == slow){
                 return true;
             }
-            visited.add(curr);
+            fast = next(next(fast));
+            slow = next(slow);
         }
         return false;
     }
 
+    private ListNode next(ListNode node){
+        if (node == null){
+            return null;
+        }else {
+            return node.next;
+        }
+    }
 }
