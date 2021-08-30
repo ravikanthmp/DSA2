@@ -14,20 +14,15 @@ public class Q141 {
         }
     }
 
-    class ListNodeWrapper{
-        ListNode node;
-
-    }
 
     public boolean hasCycle(ListNode head) {
 
         Set<ListNode> visited = new HashSet<>();
-        for(ListNode curr = head; curr != null; curr = curr.next){
+        for (ListNode curr = head; curr != null; curr = curr.next){
             if (visited.contains(curr)){
                 return true;
-            }else {
-                visited.add(curr);
             }
+            visited.add(curr);
         }
         return false;
     }
