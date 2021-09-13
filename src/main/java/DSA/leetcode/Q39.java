@@ -11,35 +11,24 @@ public class Q39 {
     private List<List<Integer>> results = new ArrayList<>();
 
     public List<List<Integer>> combinationSum(int[] candidates, int target) {
-
         this.candidates = candidates;
         this.target = target;
         Arrays.sort(candidates);
-        search(target, new ArrayList<>());
+        search(0, target, new ArrayList<>());
         return results;
     }
 
-    private void search(int remaining, List<Integer> soFar){
-        if(remaining < 0){
+    private void search(int idx, int sumRemaining, List<Integer> soFar){
+        if (sumRemaining < 0){
             return;
-        }
-        if (remaining == 0){
-            results.add(new ArrayList(soFar));
+        }else if (sumRemaining == 0){
+            results.add(new ArrayList<>(soFar));
         }else {
-            Integer prev = null;
-            Integer minCandidate = soFar.isEmpty() ? null : soFar.get(soFar.size() - 1);
 
-            for (int candidate : candidates) {
-                if(prev != null && prev.equals(candidate)){
-                    continue;
-                }else{
-                    prev = candidate;
-                }
-                if (minCandidate != null && candidate < minCandidate){
-                    continue;
-                }
-                soFar.add(candidate);
-                search(remaining - candidate, soFar);
+            for (int i = idx; i < candidates.length; i++) {
+                soFar.add(candidates[i]);
+                int r = sumRemaining - candidates[i];
+                search(i, r, soFar);
                 soFar.remove(soFar.size() - 1);
             }
         }
