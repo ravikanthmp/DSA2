@@ -1,5 +1,7 @@
 package DSA.leetcode;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.PriorityQueue;
 import java.util.Stack;
 
@@ -12,22 +14,29 @@ public class Q56 {
         }
 
         // 2. Squash conflicting intervals
-        Stack<Interval> stack = new Stack<>();
-        Interval minInterval;
+        List<Interval> list = new ArrayList<>();
         while (!minPQ.isEmpty()){
-            minInterval = minPQ.remove();
-            while (!stack.isEmpty() && stack.peek().intersects(minInterval)){
-                minInterval = stack.pop().merge(minInterval);
+            Interval smallest = minPQ.remove();
+            if (list.isEmpty()){
+                list.add(smallest);
+            }else {
+                Interval last = list.remove(list.size() - 1);
+                if (last.intersects(smallest)){
+                    Interval merged = last.merge(smallest);
+                    list.add(merged);
+                }else {
+                    list.add(last);
+                    list.add(smallest);
+                }
             }
-            stack.push(minInterval);
         }
-        int[][] res = new int[stack.size()][];
+
+        int[][] ans = new int[list.size()][];
         int i = 0;
-        while (!stack.isEmpty()){
-            Interval pop = stack.pop();
-            res[i++] = new int[]{pop.start, pop.end};
+        for (Interval el : list){
+            ans[i++] = new int[]{el.start, el.end};
         }
-        return res;
+        return ans;
     }
 
     class Interval implements Comparable<Interval>{
@@ -42,7 +51,7 @@ public class Q56 {
 
         @Override
         public int compareTo(Interval o) {
-            return Integer.compare(this.end, o.end);
+            return Integer.compare(this.start, o.start);
         }
 
         public boolean intersects(Interval other){
@@ -59,7 +68,7 @@ public class Q56 {
     }
 
     public static void main(String[] args) {
-        int[][] arr = new int[][]{{2,3},{4,5},{6,7},{8,9},{1,10}};
+        int[][] arr = new int[][]{{1, 3}, {2, 6}, {8, 10}, {15, 18}};
         Q56 test = new Q56();
         int[][] merge = test.merge(arr);
         for (int[] ints : merge) {

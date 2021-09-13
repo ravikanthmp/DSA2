@@ -19,53 +19,42 @@ public class Q15 {
         Arrays.sort(nums);
 
         List<List<Integer>> resultList = new ArrayList<>();
-        for (int i = 0; i < nums.length - 2 && inRange(nums, i) && nums[i] <= 0; i = next(nums, i)) {
+        if(nums.length < 3){
+            return resultList;
+        }
+
+        for (int i = 0; i < nums.length && nums[i] <= 0 ; ) {
             int j = i + 1;
             int k = nums.length - 1;
-            while (j < k && inRange(nums, j) && inRange(nums, k)){
-                int sum = nums[i] + nums[j] + nums[k];
-                if (sum == 0){
-                   resultList.add(List.of(nums[i], nums[j], nums[k]));
-                   j = next(nums, j);
-                }else if (sum < 0){
-                    j = next(nums, j);
+            while (j < k){
+                if (nums[j] + nums[k] == Math.abs(nums[i])){
+                    resultList.add(List.of(nums[i], nums[j], nums[k]));
+                    j++;
+                    k--;
+                    while ( j <k && nums[j] == nums[j -1]){
+                        j++;
+                    }
+                    while (k > j && nums[k] == nums[k + 1]){
+                        k--;
+                    }
+                }else if (nums[j] + nums[k] < Math.abs(nums[i])){
+                    j++;
                 }else {
-                    k = previous(nums, k);
+                    k--;
                 }
+            }
+
+            i++;
+            while (i < nums.length && nums[i] == nums[i - 1]){
+                i++;
             }
         }
         return resultList;
     }
 
-    private int next(int[] nums, int i) {
-
-        int j = -1;
-        for ( j = i + 1; j < nums.length; j++) {
-            if (nums[j] > nums[i]){
-                return j;
-            }
-        }
-        return j;
-    }
-
-    private boolean inRange(int[] nums, int i){
-        return i >= 0 && i < nums.length;
-    }
-
-    private int previous(int[] nums, int i){
-        int j = -1;
-        for ( j = i - 1; j >= 0 ; j--) {
-            if (nums[j] < nums[i]){
-                return j;
-            }
-        }
-
-        return j;
-    }
-
     public static void main(String[] args) {
         Q15 threeSum = new Q15();
-        int[] arr = {0, 0, 0};
+        int[] arr = {-1,0,1,2,-1,-4,-2,-3,3,0,4};
         System.out.println(threeSum.threeSum(arr));
     }
 

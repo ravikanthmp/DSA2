@@ -4,15 +4,14 @@ public class Q55 {
 
 
     public boolean canJump(int[] nums) {
-        int leftMostReachable = nums.length - 1;
-        for (int i = nums.length - 2; i > 0; i--) {
-            int farthest = Math.min(nums.length - 1, i + nums[i]);
-            if (farthest >= leftMostReachable){
-                leftMostReachable = i;
+
+        int leftmostIndexThatCanReach = nums.length -1 ;
+        for (int i = nums.length - 2; i >= 0; i--) {
+            if (i + nums[i] >= leftmostIndexThatCanReach){
+                leftmostIndexThatCanReach = i;
             }
         }
-        int farthest = Math.min(nums.length - 1, nums[0]);
-        return farthest >= leftMostReachable;
+        return leftmostIndexThatCanReach == 0;
     }
 
     public static void main(String[] args) {

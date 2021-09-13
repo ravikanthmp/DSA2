@@ -5,28 +5,18 @@ import java.util.Set;
 
 public class Q3 {
     public int lengthOfLongestSubstring(String s) {
-        int left = 0;
+
         int maxSoFar = 0;
-        Set<Character> charsInWindow = new HashSet<>();
+        Set<Character> windowChars = new HashSet<>();
+        int left = 0;
         for (int right = 0; right < s.length(); right++) {
-
-            // resize window
-            if (charsInWindow.contains(s.charAt(right))){
-                while (s.charAt(left) != s.charAt(right)){
-                    charsInWindow.remove(s.charAt(left));
-                    left++;
-                }
-                charsInWindow.remove(s.charAt(left));
-                left++;
+            char r = s.charAt(right);
+            while (windowChars.contains(r)){
+               windowChars.remove(s.charAt(left++));
             }
-
-            // Window is "clean" now
-            charsInWindow.add(s.charAt(right));
-            int size = right - left + 1;
-            maxSoFar = Math.max(maxSoFar, size);
-
+            windowChars.add(r);
+            maxSoFar = Math.max(maxSoFar, windowChars.size());
         }
-
         return maxSoFar;
     }
 }
