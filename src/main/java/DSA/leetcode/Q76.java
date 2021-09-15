@@ -6,74 +6,72 @@ import java.util.Map;
 public class Q76 {
 
     class Window{
-        int leftIdx;
+        int left;
+        int right;
 
-        public Window(int leftIdx, int rightIdx) {
-            this.leftIdx = leftIdx;
-            this.rightIdx = rightIdx;
+        public Window(int left, int right) {
+            this.left = left;
+            this.right = right;
         }
-
-        int rightIdx;
     }
+
     public String minWindow(String s, String t) {
+        Map<Character, Integer> require = new HashMap<>();
+        for (char c : t.toCharArray()) {
+            if (!require.containsKey(c)) {
+                require.put(c, 0);
+            }
+            require.put(c, require.get(c) + 1);
+        }
         int remaining = t.length();
-        int minSoFar = Integer.MAX_VALUE;
-        Window minWindow = null;
-        Map<Character, Integer> require = initRequire(t);
-        int l = 0;
-        for (int r = 0; r < s.length(); r++) {
+        int left = 0;
+        int minWindowSize = Integer.MAX_VALUE;
+        Window window = null;
+        for (int i = 0; i < s.length(); i++) {
+            char right = s.charAt(i);
 
             // housekeeping
-            if (require.containsKey(s.charAt(r))){
-                int numCharsRequired = require.get(s.charAt(r));
-                if (numCharsRequired > 0){
+            if (require.containsKey(right)){
+                Integer required = require.get(right);
+                if (required > 0){
                     remaining--;
                 }
-                require.put(s.charAt(r), numCharsRequired - 1);
+                require.put(right, required - 1);
             }
 
 
-            // can shrink ?
-            if (remaining <= 0){
-                while (l <= r){
-                    int lengthOfWindow = r - l + 1;
-                    if (lengthOfWindow < minSoFar){
-                        minSoFar = lengthOfWindow;
-                        minWindow = new Window(l, r);
-                    }
+            // shrink window
+            if (remaining == 0){
 
-                    if (require.containsKey(s.charAt(l))){
-                        if (require.get(s.charAt(l)) < 0){
-                            require.put(s.charAt(l), require.get(s.charAt(l)) + 1);
-                            l++;
-                        }else {
-                            break;
-                        }
+                while (left <= i){
 
+                    if (!require.containsKey(s.charAt(left))){
+                        left++;
+
+                    } else if (require.get(s.charAt(left)) < 0){
+                        require.put(s.charAt(left), require.get(s.charAt(left)) + 1);
+                        left++;
                     }else {
-                        l++;
+                        break;
                     }
-
 
                 }
+
+                if ((i - left + 1) < minWindowSize){
+                    minWindowSize = (i - left + 1);
+                    window = new Window(left, i);
+                }
             }
+
+
         }
-
-        return minWindow == null ? "" : s.substring(minWindow.leftIdx, minWindow.rightIdx + 1);
+        return window == null ? "" : s.substring(window.left, window.right + 1);
     }
 
-    private Map<Character, Integer> initRequire(String t){
-        Map<Character, Integer> require = new HashMap<>();
-        t.chars().forEach(c -> {
-            require.putIfAbsent((char)c, 0);
-            require.put((char)c, require.get((char)c) + 1);
-        });
-        return require;
-    }
 
     public static void main(String[] args) {
-        String s = "a";
-        String t = "a";
+        String s = "ADOBECODEBANC";
+        String t = "ABC";
         Q76 test = new Q76();
         System.out.println(test.minWindow(s, t));
     }
