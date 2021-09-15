@@ -1,65 +1,64 @@
 package DSA.leetcode;
+
 import java.util.Stack;
 
 public class Q84 {
 
     public int largestRectangleArea(int[] heights) {
-        int[] nextSmallerElement = nse(heights);
-        int[] previousSmallerElement = pse(heights);
-
         int maxSoFar = 0;
-        int currArea = 0;
+        int[] nse = nse(heights);
+        int[] pse = pse(heights);
         for (int i = 0; i < heights.length; i++) {
-            currArea = heights[i];
-            int j = nextSmallerElement[i];
-            int k = previousSmallerElement[i];
-
-            if (j != i + 1){
-                currArea += (j - i - 1)*heights[i];
-            }
-
-            if (k != i - 1){
-                currArea += (i - k - 1)*heights[i];
-            }
-
-            maxSoFar = Math.max(maxSoFar, currArea);
+            int area = area(heights, i, nse, pse);
+            maxSoFar = Math.max(maxSoFar, area);
         }
-
         return maxSoFar;
+    }
+
+    private int area(int[] heights, int i, int[] nse, int[] pse) {
+       int right = nse[i] - 1;
+       int left = pse[i] + 1;
+        int width = (right - left + 1);
+
+        return heights[i] * width;
     }
 
     private int[] nse(int[] heights) {
         int[] nse = new int[heights.length];
         Stack<Integer> stack = new Stack<>();
-        for (int i = 0; i < heights.length; i++) {
-            while (!stack.isEmpty() && heights[i] < heights[stack.peek()]){
+        stack.push(0);
+        for (int i = 1; i < heights.length; i++) {
+            while (!stack.isEmpty() && heights[stack.peek()] > heights[i]) {
                 nse[stack.pop()] = i;
             }
             stack.push(i);
         }
-        while (!stack.isEmpty()){
+        while (!stack.isEmpty()) {
             nse[stack.pop()] = heights.length;
         }
         return nse;
     }
 
     private int[] pse(int[] heights) {
-        int[] nse = new int[heights.length];
+        int[] pse = new int[heights.length];
         Stack<Integer> stack = new Stack<>();
-        for (int i = heights.length - 1; i >= 0; i--) {
+        stack.push(heights.length - 1);
+        for (int i = heights.length - 2; i >= 0; i--) {
             while (!stack.isEmpty() && heights[i] < heights[stack.peek()]){
-                nse[stack.pop()] = i;
+                pse[stack.pop()] = i;
             }
             stack.push(i);
         }
+
         while (!stack.isEmpty()){
-            nse[stack.pop()] = -1;
+            pse[stack.pop()] = -1;
         }
-        return nse;
+
+        return pse;
     }
 
     public static void main(String[] args) {
-        int[] arr ={2, 1, 5, 6, 2, 3};
+        int[] arr = {2, 1, 5, 6, 2, 3};
         Q84 test = new Q84();
         System.out.println(test.largestRectangleArea(arr));
     }

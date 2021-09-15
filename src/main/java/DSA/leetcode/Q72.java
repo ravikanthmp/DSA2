@@ -2,45 +2,56 @@ package DSA.leetcode;
 
 public class Q72 {
 
-    private Integer[][] memo;
+    Integer[][] dp ;
 
     public int minDistance(String word1, String word2) {
-        memo = new Integer[word1.length()][word2.length()];
+        dp = new Integer[word1.length() + 1][word2.length() + 1];
+        for (int row = 0; row < word1.length(); row++) {
+            for (int col = 0; col < word2.length(); col++) {
+                dp[row][col] = Integer.MAX_VALUE;
+            }
+        }
         return minDistance(word1, word2, 0, 0);
     }
 
     private int minDistance(String word1, String word2, int idx1, int idx2){
         if (idx1 == word1.length() && idx2 == word2.length()){
             return 0;
-        }if (idx1 == word1.length()){
+        }else if (idx1 == word1.length()){
             return word2.length() - idx2;
         }else if (idx2 == word2.length()){
             return word1.length() - idx1;
         }else {
 
-            // check memo
-            if (memo[idx1][idx2] != null){
-                return memo[idx1][idx2];
-            }
-            // replace
-            int ans = Integer.MAX_VALUE;
-            ans = Math.min(ans,
-                    word1.charAt(idx1) == word2.charAt(idx2) ?
-                    minDistance(word1, word2, idx1  + 1, idx2 + 1) :
-                            minDistance(word1, word2, idx1  + 1, idx2 + 1) + 1);
-            ans = Math.min(
-                    ans,
-                    1 + Math.min(minDistance(word1, word2, idx1 + 1, idx2),
-                            minDistance(word1, word2, idx1, idx2 + 1))
-            );
+            int saved = dp[idx1][idx2];
+            if (saved == Integer.MAX_VALUE){
+                int ans;
 
-            memo[idx1][idx2] = ans;
-            return memo[idx1][idx2];
+                if (word1.charAt(idx1) == word2.charAt(idx2)){
+                    ans = minDistance(word1, word2, idx1 + 1, idx2 + 1);
+                }else {
+                    ans = Math.min(
+                            1 + minDistance(word1, word2, idx1, idx2 + 1),
+                            1 + minDistance(word1, word2, idx1 + 1, idx2)
+                    );
+
+                    ans = Math.min(ans,
+                            1 + minDistance(word1, word2, idx1 + 1, idx2 + 1)
+                    );
+                }
+
+                dp[idx1][idx2] = ans;
+
+            }
+
+            return dp[idx1][idx2];
+
         }
+
     }
 
     public static void main(String[] args) {
         Q72 test = new Q72();
-        System.out.println(test.minDistance("horse", "ros"));
+        System.out.println(test.minDistance("", ""));
     }
 }

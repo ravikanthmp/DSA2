@@ -1,7 +1,6 @@
 package DSA.leetcode;
 
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.List;
 
 public class Q78 {
@@ -15,19 +14,19 @@ public class Q78 {
         return results;
     }
 
-    private void subsets(int idx, List<Integer> soFar){
+    private void subsets(int idx, List<Integer> list){
         if (idx == nums.length){
-            results.add(new ArrayList<>(soFar));
-            return;
+            results.add(new ArrayList<>(list));
+        }else {
+
+            // include
+            list.add(nums[idx]);
+            subsets(idx + 1, list);
+            list.remove(list.size() - 1);
+
+            // exclude
+            subsets(idx + 1, list);
         }
-
-        // with
-        soFar.add(nums[idx]);
-        subsets(idx + 1, soFar);
-        soFar.remove(soFar.size() - 1);
-
-        // without
-        subsets(idx + 1, soFar);
     }
 
     public static void main(String[] args) {
