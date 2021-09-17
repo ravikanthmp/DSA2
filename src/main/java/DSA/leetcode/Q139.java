@@ -4,55 +4,46 @@ import java.util.Arrays;
 import java.util.List;
 
 public class Q139 {
+
+
     private String s;
     private List<String> wordDict;
     private Boolean[] memo;
-
     public boolean wordBreak(String s, List<String> wordDict) {
 
         this.s = s;
         this.wordDict = wordDict;
         this.memo = new Boolean[s.length()];
-        Arrays.fill(memo, null);
-        return wordBreak(0);
+        return test(0);
     }
 
-
-    private boolean wordBreak(int idx){
+    private boolean test(int idx) {
         if (idx == s.length()){
             return true;
         }else {
-            Boolean res = memo[idx];
-            if (res == null){
 
+            if (memo[idx] == null){
                 boolean ans = false;
-
-                for (String word : wordDict){
-                    int remainingLetters = s.length() - idx;
-                    if (word.length() <= remainingLetters){
-                        if (s.substring(idx, idx + word.length()).equals(word)){
-                            boolean recurse = wordBreak(idx + word.length());
-                            if (recurse){
-                                ans = true;
-                                break;
-                            }
+                String suffix = s.substring(idx);
+                for (String word : wordDict) {
+                    if (suffix.startsWith(word)){
+                        ans = test(idx + word.length());
+                        if (ans){
+                            break;
                         }
                     }
                 }
-
                 memo[idx] = ans;
-                return memo[idx];
-            }else {
-                return res;
             }
+
+            return memo[idx];
         }
     }
 
-
     public static void main(String[] args) {
         Q139 test = new Q139();
-        String[] arr = {"a"};
-        System.out.println(test.wordBreak("a", Arrays.asList(arr)));
+        String[] arr = {"leet", "code"};
+        System.out.println(test.wordBreak("leetcode", Arrays.asList(arr)));
     }
 
 }

@@ -4,7 +4,7 @@ import java.util.HashSet;
 import java.util.Set;
 
 public class Q141 {
-    class ListNode {
+    public class ListNode {
         int val;
         ListNode next;
 
@@ -16,15 +16,18 @@ public class Q141 {
 
 
     public boolean hasCycle(ListNode head) {
+        if (head == null || head.next == null){
+            return false;
+        }
 
-        ListNode fast = next(next(head));
-        ListNode slow = head;
-        while (fast != null){
+        ListNode fast = head;
+        ListNode slow = fast;
+        while (fast != null && fast.next != null){
+            fast = fast.next.next;
+            slow = slow.next;
             if (fast == slow){
                 return true;
             }
-            fast = next(next(fast));
-            slow = next(slow);
         }
         return false;
     }
