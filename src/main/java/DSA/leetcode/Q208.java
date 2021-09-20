@@ -1,12 +1,12 @@
 package DSA.leetcode;
 
-import java.util.HashMap;
-import java.util.Map;
+import java.util.Arrays;
+import java.util.Objects;
 
 public class Q208 {
 
     class Node{
-        Map<Character, Node> children = new HashMap<>();
+        Node[] children = new Node[128];
         boolean hasWord;
 
         public void setHasWord(boolean val){
@@ -14,11 +14,11 @@ public class Q208 {
         }
 
         public boolean hasChild(char c){
-            return children.containsKey(c);
+            return children[c] != null;
         }
 
         public Node getChild(char c){
-            return children.get(c);
+             return children[c];
         }
     }
 
@@ -37,7 +37,7 @@ public class Q208 {
             for (int i = 0; i < word.length(); i++) {
                 char currChar = word.charAt(i);
                 if (!curr.hasChild(currChar)){
-                    curr.children.put(currChar, new Node());
+                    curr.children[currChar] = new Node();
                 }
                 curr = curr.getChild(currChar);
             }
@@ -72,7 +72,7 @@ public class Q208 {
             if (curr.hasWord){
                 return true;
             }else {
-                return curr.children.keySet().size() != 0;
+                return Arrays.stream(curr.children).anyMatch(Objects::nonNull);
             }
         }
     }
