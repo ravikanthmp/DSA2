@@ -6,11 +6,9 @@ public class Q198 {
      * T(N) = O(N^2)
      * S(N) = O(N)
      */
-    private Integer[] memo;
-    private int[] nums;
 
     public int rob(int[] nums) {
-        this.nums = nums;
+
         if (nums == null || nums.length == 0){
             return 0;
         }else if (nums.length == 1){
@@ -18,25 +16,17 @@ public class Q198 {
         }else if (nums.length == 2){
             return Math.max(nums[0], nums[1]);
         }else {
-            memo = new Integer[nums.length];
-            memo[nums.length - 1] = nums[nums.length - 1];
-            memo[nums.length - 2] = Math.max(nums[nums.length - 1], nums[nums.length - 2]);
-            return Math.max(f(0), f(1));
-        }
-
-    }
-
-    private int f(int idx){
-        if (idx >= nums.length){
-            return 0;
-        }else {
-            Integer savedAns = memo[idx];
-            if (savedAns == null){
-                memo[idx] = Math.max(f(idx + 2) + nums[idx], f(idx + 1));
+            int[] tab = new int[nums.length];
+            tab[nums.length - 1] = nums[nums.length - 1];
+            tab[nums.length - 2] = Math.max(nums[nums.length - 2], nums[nums.length - 1]);
+            for (int i = nums.length - 3; i >= 0; i--) {
+                tab[i] = Math.max(nums[i] + tab[i + 2], tab[i + 1]);
             }
-            return memo[idx];
+            return tab[0];
         }
+
     }
+
 
     public static void main(String[] args) {
         Q198 test = new Q198();
