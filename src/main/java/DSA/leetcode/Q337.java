@@ -2,21 +2,33 @@ package DSA.leetcode;
 
 import DSA.practise.tree.binaryTree.TreeNode;
 
+import java.util.HashMap;
+import java.util.Map;
 import java.util.Objects;
 
 public class Q337 {
+    Map<TreeNode, Integer> memo = new HashMap<>();
+
     public int rob(TreeNode root) {
         if (root == null){
             return 0;
         }else {
-            return Math.max(
-                    value(root)
-                            + rob(left(left(root))) + rob(right(left(root)))
-                            + rob(left(right(root))) + rob(right(right(root))),
-                    rob(left(root)) + rob(right(root)));
+            if (memo.containsKey(root)){
+                return memo.get(root);
+            }else {
+                int ans =  Math.max(
+                        value(root)
+                                + rob(left(left(root))) + rob(right(left(root)))
+                                + rob(left(right(root))) + rob(right(right(root))),
+                        rob(left(root)) + rob(right(root)));
+                memo.put(root, ans);
+                return memo.get(root);
+            }
+
         }
 
     }
+
 
     private TreeNode left(TreeNode node) {
         return Objects.nonNull(node) ? node.left : null;
@@ -28,11 +40,5 @@ public class Q337 {
 
     private int value(TreeNode node){
         return Objects.nonNull(node) ? node.val : 0;
-    }
-
-    public static void main(String[] args) {
-        TreeNode root = new TreeNode(3);
-        Q337 test = new Q337();
-        System.out.println(test.rob(root));
     }
 }
