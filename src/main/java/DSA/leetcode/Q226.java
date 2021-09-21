@@ -1,29 +1,34 @@
 package DSA.leetcode;
 
 import DSA.practise.tree.binaryTree.TreeNode;
-import java.util.LinkedList;
-import java.util.Queue;
+import java.util.Stack;
 
 public class Q226 {
 
     public TreeNode invertTree(TreeNode root) {
-        Queue<TreeNode> queue = new LinkedList<>();
-        if(root != null)queue.add(root);
-        while (!queue.isEmpty()){
+        Stack<TreeNode> stack = new Stack<>();
 
-            int size = queue.size();
-            for (int i = 0; i < size; i++) {
-                TreeNode first = queue.remove();
-                if (first.left != null){
-                    queue.add(first.left);
-                }
-                if (first.right != null){
-                    queue.add(first.right);
-                }
-                swapChildren(first);
-            }
+        TreeNode curr = root;
+        while (curr != null){
+            stack.push(curr);
+            curr = curr.left;
         }
-       return root;
+
+        while (!stack.isEmpty()){
+            curr = stack.pop();
+            TreeNode currTemp = curr;
+            if (curr.right != null){
+                curr = curr.right;
+                while (curr != null){
+                    stack.push(curr);
+                    curr = curr.left;
+                }
+            }
+            swapChildren(currTemp);
+        }
+
+
+        return root;
     }
 
     private void swapChildren(TreeNode root){
@@ -33,4 +38,5 @@ public class Q226 {
             root.right = temp;
         }
     }
+
 }
