@@ -7,10 +7,11 @@ import java.util.Map;
 
 public class Q279 {
 
-    Map<Integer, Integer> memo ;
-
     public int numSquares(int n){
-        this.memo = new HashMap<>();
+
+        int[] tab = new int[n + 1];
+        tab[0] = 0;
+        tab[1] = 1;
 
         double sqrt = Math.sqrt(n);
 
@@ -22,37 +23,22 @@ public class Q279 {
             }
         }
 
-        return f(n, S, memo);
-
-    }
-
-    private int f(int n, List<Integer> S, Map<Integer, Integer> memo){
-        if (n == 0){
-            return 0;
-        }else if (n == 1){
-            return 1;
-        }else {
-//            memo.computeIfAbsent(n, x -> {
-//                int ans = Integer.MAX_VALUE;
-//                for (Integer s : S) {
-//                    if (x >= s){
-//                        ans = Math.min(ans, 1 + f(x - s, S, memo));
-//                    }
-//                }
-//                return ans;
-//            });
-            if (!memo.containsKey(n)){
-                int ans = Integer.MAX_VALUE;
-                for (Integer s : S) {
-                    if (n >= s){
-                        ans = Math.min(ans, 1 + f(n - s, S, memo));
-                    }
+        for (int i = 2; i <= n; i++) {
+            int res = Integer.MAX_VALUE;
+            for (int s : S){
+                if (s > i){
+                    break;
+                }else {
+                    res = Math.min(res, 1 + tab[i - s]);
                 }
-                memo.put(n, ans);
             }
-            return memo.get(n);
+            tab[i] = res;
         }
+
+        return tab[n];
+
     }
+
 
     public static void main(String[] args) {
         Q279 test = new Q279();
