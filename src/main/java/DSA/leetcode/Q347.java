@@ -1,9 +1,6 @@
 package DSA.leetcode;
 
-import java.util.Comparator;
-import java.util.HashMap;
-import java.util.Map;
-import java.util.PriorityQueue;
+import java.util.*;
 
 public class Q347 {
 
@@ -32,8 +29,15 @@ public class Q347 {
 
         // top k O(N)
         Comparator<Pair> cmp = Comparator.comparingInt(x -> x.freq);
-        PriorityQueue<Pair> pq = new PriorityQueue<>(cmp.reversed());
+        PriorityQueue<Pair> pq = new PriorityQueue<>(cmp);
         for (Map.Entry<Integer, Integer> entry : frequencyMap.entrySet()) {
+            if (pq.size() == k){
+                if (entry.getValue() > pq.peek().freq){
+                    pq.remove();
+                }else {
+                    continue;
+                }
+            }
             pq.add(new Pair(entry.getKey(), entry.getValue()));
         }
 
@@ -44,5 +48,12 @@ public class Q347 {
         }
         return res;
 
+    }
+
+    public static void main(String[] args) {
+        int[] arr = {1, 1, 1, 2, 2, 3};
+        int k = 2;
+        Q347 test = new Q347();
+        System.out.println(Arrays.toString(test.topKFrequent(arr, k)));
     }
 }
