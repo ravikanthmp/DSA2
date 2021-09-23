@@ -28,26 +28,35 @@ public class Q347 {
         }
 
         // top k O(N)
-        Comparator<Pair> cmp = Comparator.comparingInt(x -> x.freq);
-        PriorityQueue<Pair> pq = new PriorityQueue<>(cmp);
-        for (Map.Entry<Integer, Integer> entry : frequencyMap.entrySet()) {
-            if (pq.size() == k){
-                if (entry.getValue() > pq.peek().freq){
-                    pq.remove();
-                }else {
-                    continue;
-                }
-            }
-            pq.add(new Pair(entry.getKey(), entry.getValue()));
-        }
+        int i;
+        do {
+            i = quickSelect(nums, frequencyMap);
+        }while (i != k);
 
         // O(klogN)
-        int[] res = new int[k];
-        for (int i = 0; i < k; i++) {
-            res[i] = pq.remove().num;
-        }
-        return res;
+       return Arrays.copyOf(nums, k);
 
+    }
+
+    private void exch(int[] nums, int i, int j){
+        int temp = nums[i];
+        nums[i] = nums[j];
+        nums[j] = temp;
+    }
+
+    private int quickSelect(int[] nums, Map<Integer, Integer> frequencyMap){
+        int pivot = nums[0];
+        int lt = 0;
+        int i = 0;
+        while (i < nums.length){
+            int cmp = Integer.compare(frequencyMap.get(pivot), frequencyMap.get(nums[i]));
+            if (cmp <= 0){
+                i++; lt++;
+            }else {
+                exch(nums, lt++, i++);
+            }
+        }
+        return lt;
     }
 
     public static void main(String[] args) {
