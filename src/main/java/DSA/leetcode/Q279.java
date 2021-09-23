@@ -1,17 +1,10 @@
 package DSA.leetcode;
 
-import java.util.HashMap;
-import java.util.LinkedList;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 public class Q279 {
 
     public int numSquares(int n){
-
-        int[] tab = new int[n + 1];
-        tab[0] = 0;
-        tab[1] = 1;
 
         double sqrt = Math.sqrt(n);
 
@@ -23,20 +16,32 @@ public class Q279 {
             }
         }
 
-        for (int i = 2; i <= n; i++) {
-            int res = Integer.MAX_VALUE;
-            for (int s : S){
-                if (s > i){
-                    break;
-                }else {
-                    res = Math.min(res, 1 + tab[i - s]);
+
+        TreeSet<Integer> visited = new TreeSet<>();
+        Queue<Integer> queue = new LinkedList<>();
+        queue.addAll(S);
+        visited.addAll(S);
+
+        int step = 1;
+        while (!queue.isEmpty()){
+            int size = queue.size();
+            for (int i = 0; i < size; i++) {
+                int first = queue.remove();
+                if (first == n){
+                    return step;
+                }
+                for(int s : S){
+                    int x = first + s;
+                    if (x <= n && !visited.contains(x)){
+                        visited.add(x);
+                        queue.add(x);
+                    }
                 }
             }
-            tab[i] = res;
+            step++;
         }
 
-        return tab[n];
-
+        return Integer.MAX_VALUE;
     }
 
 
