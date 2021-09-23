@@ -5,39 +5,24 @@ import java.util.Map;
 
 public class Q322 {
 
-    Map<Integer, Integer> map = new HashMap<>();
-    private int[] coins;
-    private int amount;
 
     public int coinChange(int[] coins, int amount) {
 
-        this.coins = coins;
-        this.amount = amount;
-        return f(amount);
-    }
-
-    private int f(int x){
-        if (x < 0){
-            return -1;
-        }else if (x == 0){
-            return 0;
-        }else {
-            if (!map.containsKey(x)){
-                int res = -1;
-                for (int coin : coins) {
-                    if (coin <= x){
-                        int subProblem = f(x - coin);
-                        if (subProblem != -1){
-                            res = Math.min(res, 1 + subProblem);
-                        }
-
-                    }
+        int[] tab = new int[amount + 1];
+        tab[0] = 0;
+        for (int i = 1; i < tab.length; i++) {
+            int init = Integer.MAX_VALUE;
+            for (int coin : coins) {
+                if (coin <= i && tab[i - coin] != Integer.MAX_VALUE){
+                    init = Math.min(init, 1 + tab[i - coin]);
                 }
-                map.put(x, res);
             }
-            return map.get(x);
+            tab[i] = init;
         }
+        return tab[amount] != Integer.MAX_VALUE ? tab[amount] : -1;
+
     }
+
 
     public static void main(String[] args) {
         Q322 test = new Q322();
