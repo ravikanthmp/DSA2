@@ -10,26 +10,27 @@ public class Q416 {
             return false;
         }else {
             int target = sum/2;
-            Boolean[][] memo = new Boolean[nums.length][];
-            for (int i = 0; i < memo.length; i++) {
-                memo[i] = new Boolean[target + 1];
+            boolean[] memo = new boolean[sum + 1];
+            boolean[] temp = new boolean[sum + 1];
+            memo[nums[nums.length - 1]] = true;
+            for (int i = nums.length - 2; i >= 0; i--) {
+
+                for (int j = 0; j < memo.length; j++) {
+                    if (memo[j]){
+                        temp[j] = true;
+                        temp[j + nums[i]] = true;
+                    }
+                }
+                temp[nums[i]] = true;
+
+                memo = temp;
+                temp = new boolean[sum + 1];
+
+                if (memo[target]){
+                    return true;
+                }
             }
-
-            return test(target, nums, 0, memo);
-        }
-    }
-
-    private boolean test(int target, int[] nums, int idx, Boolean[][] memo) {
-        if (idx == nums.length){
-            return target == 0;
-        }else {
-
-            if (memo[idx][target] == null){
-                memo[idx][target] = test(target, nums, idx + 1, memo) ||
-                        test(target - nums[idx], nums, idx + 1, memo);
-            }
-
-            return memo[idx][target];
+            return false;
         }
     }
 
