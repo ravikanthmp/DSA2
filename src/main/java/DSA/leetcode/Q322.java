@@ -1,49 +1,48 @@
 package DSA.leetcode;
 
-import java.util.HashMap;
-import java.util.Map;
+
+import java.util.LinkedList;
+import java.util.Queue;
 
 public class Q322 {
 
-    Map<Integer, Integer> map = new HashMap<>();
-    private int[] coins;
-    private int amount;
 
     public int coinChange(int[] coins, int amount) {
 
-        this.coins = coins;
-        this.amount = amount;
-        return f(amount);
-    }
+        Queue<Integer> queue = new LinkedList<>();
+        queue.add(amount);
+        int step = 0;
+        boolean[] visited = new boolean[amount + 1];
+        visited[amount] = true;
+        while (!queue.isEmpty()){
 
-    private int f(int x){
-        if (x < 0){
-            return -1;
-        }else if (x == 0){
-            return 0;
-        }else {
-            if (!map.containsKey(x)){
-                int res = -1;
+            int size = queue.size();
+            for (int i = 0; i < size; i++) {
+                int first = queue.remove();
+                if (first == 0){
+                    return step;
+                }
                 for (int coin : coins) {
-                    if (coin <= x){
-                        int subProblem = f(x - coin);
-                        if (subProblem != -1){
-                            res = Math.min(res, 1 + subProblem);
+                    int next = first - coin;
+                    if (next >= 0){
+                        if (!visited[next]){
+                            visited[next] = true;
+                            queue.add(next);
                         }
-
                     }
                 }
-                map.put(x, res);
             }
-            return map.get(x);
+            step++;
         }
+        return -1;
     }
+
 
     public static void main(String[] args) {
         Q322 test = new Q322();
-        int[] coins = {3};
+        int[] coins = {1,2,5};
 
-        System.out.println(test.coinChange(coins, 2));
+        System.out.println(test.coinChange(coins, 11));
     }
 
 }
