@@ -2,68 +2,31 @@ package DSA.leetcode;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.stream.IntStream;
 
 public class Q763 {
 
-    private String s;
-    private String[] memo;
-
     public List<Integer> partitionLabels(String s) {
 
-        this.s = s;
-        this.memo = new String[s.length()];
-        return f(0);
-    }
+        int[] lastIdx = new int[26];;
+        for (int i = s.length() - 1; i >= 0 ; i--) {
+            lastIdx[s.charAt(i) - 'a'] = Math.max(lastIdx[s.charAt(i) - 'a'], i);
+        }
 
-    private List<Integer> f(int idx){
-        if (idx == s.length()){
-            return new ArrayList<>();
-        }else{
+        int startIdx = 0;
+        List<Integer> res = new ArrayList<>();
 
-            if (memo[idx] == null){
-                List<Integer> res = new ArrayList<>();
-                for (int j = idx; j < s.length(); j++) {
-                    if (canPartition(idx, j)){
-                        List<Integer> temp  = new ArrayList<>();
-                        temp.add(j - idx + 1);
-                        temp.addAll(f(j + 1));
+        while (startIdx < s.length()){
+            int currRightEnd = lastIdx[s.charAt(startIdx) - 'a'];
 
-                        res = temp;
-
-                        break;
-                    }
-                }
-                memo[idx] = toStr(res);
+            for (int j = startIdx + 1; j <= currRightEnd; j++) {
+                currRightEnd = Math.max(currRightEnd, lastIdx[s.charAt(j) - 'a']);
             }
 
-
-            return toList(memo[idx]);
-        }
-    }
-
-    private String toStr(List<Integer> list){
-        StringBuilder stringBuilder = new StringBuilder();
-        for (Integer i : list) {
-            stringBuilder.append(i).append(",");
+            res.add(currRightEnd - startIdx + 1);
+            startIdx = currRightEnd + 1;
         }
 
-        return stringBuilder.substring(0, stringBuilder.length() - 1);
-    }
-
-    private List<Integer> toList(String s){
-        String[] split = s.split(",");
-        List<Integer> list = new ArrayList<>();
-        for (String i : split) {
-            list.add(Integer.parseInt(i));
-        }
-        return list;
-    }
-
-    private boolean canPartition(int startIdx, int endIdx) {
-
-        return IntStream.rangeClosed(startIdx, endIdx)
-                .noneMatch(i -> s.lastIndexOf(s.charAt(i)) > endIdx);
+        return res;
     }
 
     public static void main(String[] args) {
