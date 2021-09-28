@@ -7,33 +7,27 @@ import java.util.Stack;
 public class Q739 {
 
     public int[] dailyTemperatures(int[] temperatures) {
-        int[] nge = nge(temperatures);
-        int[] answer = new int[temperatures.length];
-        for (int i = 0; i < answer.length; i++) {
-            answer[i] = (nge[i] == -1) ? 0 : (nge[i] - i);
-        }
-        return answer;
-    }
 
-    private int[] nge(int[] temperatures) {
-        int[] nge = new int[temperatures.length];
+        int[] answer = new int[temperatures.length];
+
         Stack<Integer> stack = new Stack<>();
         stack.push(0);
 
         for (int i = 1; i < temperatures.length; i++) {
 
             while (!stack.isEmpty() && temperatures[i] > temperatures[stack.peek()]){
-                nge[stack.pop()] = i;
+                int lIdx = stack.pop();
+                answer[lIdx] = i - lIdx;
             }
 
             stack.push(i);
         }
 
         while (!stack.isEmpty()){
-            nge[stack.pop()] = -1;
+            answer[stack.pop()] = 0;
         }
 
-        return nge;
+        return answer;
     }
 
 
