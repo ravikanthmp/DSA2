@@ -4,43 +4,37 @@ import java.util.Arrays;
 
 public class Q238 {
 
+
     public int[] productExceptSelf(int[] nums) {
 
-        int[] res = new int[nums.length];
-        int[] left = left(nums);
-        int[] right = right(nums);
+        int[] suffixProduct = suffixProduct(nums);
+        int[] prefixProduct = prefixProduct(nums);
 
-        System.out.println(Arrays.toString(left));
-
-        res[0] = right[0];
-        res[nums.length - 1] = left[nums.length - 1];
-        for (int i = 1; i < nums.length - 1; i++) {
-            res[i] = left[i] * right[i];
+        int[] productExceptSelf = new int[nums.length];
+        for (int i = 0; i < nums.length; i++) {
+            productExceptSelf[i] = prefixProduct[i] * suffixProduct[i];
         }
-        return res;
+        return productExceptSelf;
     }
 
-    int[] right(int[] nums){
-        int[] rightProduct = new int[nums.length];
-        int x = 1;
-        rightProduct[rightProduct.length - 1] = 1;
-        for (int i = rightProduct.length - 2; i >= 0; i--) {
-            rightProduct[i] = x * nums[i + 1];
-            x = rightProduct[i];
+    private int[] prefixProduct(int[] nums) {
+        int[] prefixProduct = new int[nums.length];
+        prefixProduct[0] = 1;
+        for (int i = 1; i < nums.length; i++) {
+            prefixProduct[i] = prefixProduct[i - 1] * nums[i - 1];
         }
-        return rightProduct;
+        return prefixProduct;
     }
 
-    int[] left(int[] nums){
-        int[] leftProduct = new int[nums.length];
-        int x = 1;
-        leftProduct[0] = x;
-        for (int i = 1; i < leftProduct.length; i++) {
-            leftProduct[i] = x * nums[i - 1];
-            x = leftProduct[i];
+    private int[] suffixProduct(int[] nums) {
+        int[] suffixProduct = new int[nums.length];
+        suffixProduct[nums.length - 1] = 1;
+        for (int i = suffixProduct.length - 2; i >= 0; i--) {
+            suffixProduct[i] = suffixProduct[i + 1] * nums[i + 1];
         }
-        return leftProduct;
+        return suffixProduct;
     }
+
 
     public static void main(String[] args) {
         Q238 test = new Q238();
