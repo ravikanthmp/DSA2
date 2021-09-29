@@ -1,13 +1,14 @@
 package DSA.leetcode;
 
-import java.util.TreeMap;
+import java.util.HashMap;
+import java.util.Map;
 
 public class Q1679 {
 
     public int maxOperations(int[] nums, int k) {
 
         // freq map
-        TreeMap<Integer, Integer> freqMap = new TreeMap<>();
+        Map<Integer, Integer> freqMap = new HashMap<>();
         for (int i = 0; i < nums.length; i++) {
             freqMap.put(nums[i], freqMap.getOrDefault(nums[i], 0) + 1);
         }
