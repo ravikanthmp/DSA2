@@ -7,20 +7,23 @@ public class Q238 {
 
     public int[] productExceptSelf(int[] nums) {
 
-        int product = 1;
-        for (int i = 0; i < nums.length; i++) {
-            product *= nums[i];
-        }
-
+        int[] suffixProduct = suffixProduct(nums);
         int prefix = 1;
-        int suffix = product;
-        int[] productExceptSelf = new int[nums.length];
+
         for (int i = 0; i < nums.length; i++) {
-            suffix = suffix / nums[i];
-            productExceptSelf[i] = prefix * suffix;
+            suffixProduct[i] = prefix * suffixProduct[i];
             prefix = prefix * nums[i];
         }
-        return productExceptSelf;
+        return suffixProduct;
+    }
+
+    private int[] suffixProduct(int[] nums) {
+        int[] suffixProduct = new int[nums.length];
+        suffixProduct[nums.length - 1] = 1;
+        for (int i = suffixProduct.length - 2; i >= 0; i--) {
+            suffixProduct[i] = suffixProduct[i + 1] * nums[i + 1];
+        }
+        return suffixProduct;
     }
 
 

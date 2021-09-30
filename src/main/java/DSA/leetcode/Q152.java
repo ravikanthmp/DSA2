@@ -2,18 +2,40 @@ package DSA.leetcode;
 
 public class Q152 {
 
-    public int maxProduct(int[] nums) {
+    public int maxProduct(int[] nums){
+        int[][] tab = new int[2][nums.length];
+        tab[0][nums.length - 1] = nums[nums.length -1];
+        tab[1][nums.length - 1] = nums[nums.length -1];
 
-        int exclusive = Integer.MIN_VALUE;
-        int inclusive = nums[0];
-        int maxSoFar = Integer.MIN_VALUE;
-        for (int i = 1; i < nums.length; i++) {
-            exclusive = Math.max(inclusive, exclusive);
-            inclusive = inclusive * nums[i];
-            maxSoFar = Math.max(maxSoFar, Math.max(nums[i],
-                    Math.max(exclusive, inclusive)));
+
+        int maxSoFar = tab[0][nums.length - 1];
+
+        for (int i = nums.length - 2; i >= 0; i--) {
+            if (nums[i] == 0){
+                tab[0][i] = 0;
+                tab[1][i] = 0;
+            }else if (nums[i] > 0){
+
+                if (tab[0][i + 1] <= 0){
+                    tab[0][i] = nums[i];
+                }else {
+                    tab[0][i] = nums[i] * tab[0][i + 1];
+                }
+
+                if (tab[1][i + 1] == 0){
+                    tab[1][i] = nums[i];
+                }else {
+                    tab[1][i] = nums[i] * tab[1][i  + 1];
+                }
+
+            }else {
+                tab[0][i] = (tab[1][i + 1] != 0) ? nums[i] * tab[1][i + 1] : nums[i];
+                tab[1][i] = (tab[0][i + 1] != 0) ? nums[i] * tab[0][i + 1] : nums[i];
+            }
+            maxSoFar = Math.max(tab[0][i], maxSoFar);
         }
-        return Math.max(exclusive, inclusive);
+
+        return maxSoFar;
     }
 
     public static void main(String[] args) {
