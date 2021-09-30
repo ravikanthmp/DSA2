@@ -1,20 +1,27 @@
 package DSA.leetcode;
 
+import java.util.Arrays;
+
 public class Q53 {
     public int maxSubArray(int[] nums) {
-        int l = 0;
-        int sumSoFar = 0;
-        int maxSoFar = 0;
-        for (int r = 0; r < nums.length; r++) {
-            if (sumSoFar < 0){
-                l = r;
+
+        int max = Arrays.stream(nums).max().getAsInt();
+        int sumSoFar  = 0;
+        int maxSoFar = max;
+        for (int num : nums) {
+            sumSoFar += num;
+
+            // shrink window if needed
+            if (sumSoFar < 0) {
                 sumSoFar = 0;
             }
-            sumSoFar += nums[r];
+
             maxSoFar = Math.max(maxSoFar, sumSoFar);
         }
         return maxSoFar;
+
     }
+
 
     public static void main(String[] args) {
         Q53 test = new Q53();
