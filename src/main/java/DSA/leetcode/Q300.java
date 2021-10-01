@@ -5,21 +5,19 @@ import java.util.Arrays;
 public class Q300 {
 
     public int lengthOfLIS(int[] nums) {
-        int[] tab = new int[nums.length];
+
+        int[] tab = new int[nums.length + 1];
         Arrays.fill(tab, 1);
         int maxSoFar = 1;
+        for (int i = 0; i < nums.length; i++) {
 
-        for (int i = 1; i < nums.length; i++) {
-
-            int res = tab[i];
             for (int j = 0; j < i; j++) {
                 if (nums[j] < nums[i]){
-                    res = Math.max(res, 1 + tab[j]);
+                    tab[i] = Math.max(tab[i], 1 + tab[j]);
                 }
             }
 
-            tab[i] = res;
-            maxSoFar = Math.max(maxSoFar, res);
+            maxSoFar = Math.max(maxSoFar, tab[i]);
         }
         return maxSoFar;
     }

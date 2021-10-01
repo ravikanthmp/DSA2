@@ -1,40 +1,36 @@
 package DSA.leetcode;
 
-
-import java.util.LinkedList;
-import java.util.Queue;
+import java.util.Arrays;
 
 public class Q322 {
 
-
     public int coinChange(int[] coins, int amount) {
 
-        Queue<Integer> queue = new LinkedList<>();
-        queue.add(amount);
-        int step = 0;
-        boolean[] visited = new boolean[amount + 1];
-        visited[amount] = true;
-        while (!queue.isEmpty()){
+        int[] tab = new int[amount + 1];
+        Arrays.fill(tab, Integer.MAX_VALUE);
 
-            int size = queue.size();
-            for (int i = 0; i < size; i++) {
-                int first = queue.remove();
-                if (first == 0){
-                    return step;
-                }
-                for (int coin : coins) {
-                    int next = first - coin;
-                    if (next >= 0){
-                        if (!visited[next]){
-                            visited[next] = true;
-                            queue.add(next);
-                        }
+        // base
+        int maxCoin = Integer.MIN_VALUE;
+        for (int coin : coins) {
+            if (coin <= amount){
+                tab[coin] = 1;
+                maxCoin  = Math.max(maxCoin, coin);
+            }
+
+        }
+
+        for (int i = maxCoin; i <= amount; i++) {
+
+            for (int coin : coins) {
+                if (coin <= i){
+                    if (tab[i - coin] != Integer.MAX_VALUE){
+                        tab[i] = Math.min(tab[i], 1 + tab[i - coin]);
                     }
                 }
             }
-            step++;
         }
-        return -1;
+
+        return tab[amount] != Integer.MAX_VALUE ? tab[amount] : -1;
     }
 
 
