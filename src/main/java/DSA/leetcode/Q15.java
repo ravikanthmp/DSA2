@@ -12,44 +12,45 @@ public class Q15 {
      * Space : O(1)
      */
     public List<List<Integer>> threeSum(int[] nums) {
-        if (nums.length == 0){
-            return Collections.emptyList();
-        }
-
         Arrays.sort(nums);
-
-        List<List<Integer>> resultList = new ArrayList<>();
-        if(nums.length < 3){
-            return resultList;
-        }
-
-        for (int i = 0; i < nums.length && nums[i] <= 0 ; ) {
+        List<List<Integer>> res = new ArrayList<>();
+        for (int i = 0; i < nums.length; ) {
             int j = i + 1;
             int k = nums.length - 1;
+
             while (j < k){
-                if (nums[j] + nums[k] == Math.abs(nums[i])){
-                    resultList.add(List.of(nums[i], nums[j], nums[k]));
+                int sum = nums[i] + nums[j] + nums[k];
+                if (sum == 0){
+                    res.add(List.of(nums[i], nums[j], nums[k]));
+
                     j++;
-                    k--;
-                    while ( j <k && nums[j] == nums[j -1]){
+                    while (j < k && nums[j] == nums[j - 1]){
                         j++;
                     }
-                    while (k > j && nums[k] == nums[k + 1]){
+
+
+                }else if (sum < 0){
+                    j++;
+                    while (j < k && nums[j] == nums[j - 1]){
+                        j++;
+                    }
+
+                }else {
+
+                    k--;
+                    while (k < nums.length - 1 && j < k && nums[k] == nums[k + 1]){
                         k--;
                     }
-                }else if (nums[j] + nums[k] < Math.abs(nums[i])){
-                    j++;
-                }else {
-                    k--;
                 }
             }
 
             i++;
-            while (i < nums.length && nums[i] == nums[i - 1]){
+            while (i > 0 && i < nums.length && nums[i] == nums[i - 1]){
                 i++;
             }
         }
-        return resultList;
+
+        return res;
     }
 
     public static void main(String[] args) {
