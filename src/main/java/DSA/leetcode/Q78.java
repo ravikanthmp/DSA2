@@ -5,29 +5,24 @@ import java.util.List;
 
 public class Q78 {
 
-    private List<List<Integer>> results = new ArrayList<>();
-    private int[] nums;
-
     public List<List<Integer>> subsets(int[] nums) {
-        this.nums = nums;
-        subsets(0, new ArrayList<>());
+        List<List<Integer>> results = new ArrayList<>();
+
+        f(nums, 0, new ArrayList<>(), results);
+
         return results;
     }
 
-    private void subsets(int idx, List<Integer> list){
-        if (idx == nums.length){
-            results.add(new ArrayList<>(list));
-        }else {
+    private void f(int[] nums, int idx, List<Integer> soFar, List<List<Integer>> results){
+        results.add(new ArrayList<>(soFar));
 
-            // include
-            list.add(nums[idx]);
-            subsets(idx + 1, list);
-            list.remove(list.size() - 1);
-
-            // exclude
-            subsets(idx + 1, list);
+        for (int i = idx; i < nums.length; i++) {
+            soFar.add(nums[idx]);
+            f(nums, idx + 1, soFar, results);
+            soFar.remove(soFar.size() - 1);
         }
     }
+
 
     public static void main(String[] args) {
         Q78 test = new Q78();
