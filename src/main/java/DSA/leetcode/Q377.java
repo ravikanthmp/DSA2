@@ -1,37 +1,40 @@
 package DSA.leetcode;
 
+import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.List;
 
 public class Q377 {
 
 
+    private int[] nums;
+    private int target;
+    private List<List<Integer>> results;
+
     public int combinationSum4(int[] nums, int target) {
-        int[] tab = new int[target + 1];
+        this.nums = nums;
+        this.target = target;
         Arrays.sort(nums);
-        for (int num : nums){
-            if(num <= target){
-                tab[num] = 1;
-            }
+        results = new ArrayList<>();
+        test(0, target, new ArrayList<>());
+        System.out.println(results);
+        return results.size();
+    }
 
-        }
-
-
-        if (target < nums[0]){
-            return 0;
+    private void test(int idx, int remaining, List<Integer> soFar) {
+        if (remaining < 0){
+            return;
+        }else if (remaining == 0){
+            results.add(new ArrayList<>(soFar));
         }else {
-            for (int i = nums[0]; i <= target ; i++) {
 
-                for (int num : nums) {
-                    if (num + i <= target){
-                        tab[num + i] += tab[i];
-                    }
-                }
-
+            for (int i = 0; i < nums.length; i++) {
+                soFar.add(nums[i]);
+                test(i, remaining - nums[i], soFar);
+                soFar.remove(soFar.size() - 1);
             }
+
         }
-
-        return tab[target];
-
     }
 
     public static void main(String[] args) {
