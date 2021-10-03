@@ -8,27 +8,26 @@ public class Q39 {
 
     private int[] candidates;
     private int target;
-    private List<List<Integer>> results = new ArrayList<>();
+    List<List<Integer>> resultList = new ArrayList<>();
 
     public List<List<Integer>> combinationSum(int[] candidates, int target) {
         this.candidates = candidates;
-        this.target = target;
         Arrays.sort(candidates);
-        search(0, target, new ArrayList<>());
-        return results;
+        this.target = target;
+        combinationSum(0, target, new ArrayList<>());
+        return resultList;
     }
 
-    private void search(int idx, int sumRemaining, List<Integer> soFar){
-        if (sumRemaining < 0){
+    private void combinationSum(int idx, int remaining, List<Integer> soFar){
+        if (remaining < 0){
             return;
-        }else if (sumRemaining == 0){
-            results.add(new ArrayList<>(soFar));
+        } else if (remaining == 0){
+            resultList.add(new ArrayList<>(soFar));
         }else {
 
             for (int i = idx; i < candidates.length; i++) {
                 soFar.add(candidates[i]);
-                int r = sumRemaining - candidates[i];
-                search(i, r, soFar);
+                combinationSum(i, remaining - candidates[i], soFar);
                 soFar.remove(soFar.size() - 1);
             }
         }

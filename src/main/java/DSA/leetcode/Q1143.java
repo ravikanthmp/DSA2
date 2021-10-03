@@ -2,29 +2,34 @@ package DSA.leetcode;
 
 public class Q1143 {
 
-    Integer[][] tab;
+    int[][] tab;
 
     public int longestCommonSubsequence(String text1, String text2) {
-        tab = new Integer[text1.length()][text2.length()];
-        return lcs(text1, text2, 0, 0);
+        int M = text1.length();
+        int N = text2.length();
+        tab = new int[M][N];
+        tab[M - 1][N - 1] = (text1.charAt(M - 1) == text2.charAt(N - 1)) ? 1 : 0;
+        for (int row = M - 1; row >= 0; row--) {
+            for (int col = N - 1; col >= 0; col--) {
+                int res = 0;
+                if (text1.charAt(row) == text2.charAt(col)){
+                    res = 1 + val(tab, row + 1, col + 1);
+                }else {
+                    res = Math.max(val(tab, row, col + 1),
+                            val(tab, row + 1, col));
+                }
+                tab[row][col] = res;
+            }
+        }
+
+        return tab[0][0];
     }
 
-    private int lcs(String text1, String text2, int idx1, int idx2) {
-        if (idx1 == text1.length() || idx2 == text2.length()){
-            return 0;
+    private int val(int[][] tab, int row, int col){
+        if (row >= 0 && row < tab.length && col >= 0 && col < tab[0].length){
+            return tab[row][col];
         }else {
-            Integer saved = tab[idx1][idx2];
-            if (saved == null){
-                int ans = 0;
-                if (text1.charAt(idx1) == text2.charAt(idx2)){
-                    ans = 1 + lcs(text1, text2, idx1 + 1, idx2 + 1);
-                }else {
-                    ans = Math.max( lcs(text1, text2, idx1, idx2 + 1),
-                            lcs(text1, text2, idx1 + 1, idx2));
-                }
-                tab[idx1][idx2] = ans;
-            }
-            return tab[idx1][idx2];
+            return 0;
         }
     }
 
