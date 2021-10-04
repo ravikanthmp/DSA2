@@ -8,13 +8,10 @@ public class Q198 {
      */
 
     public int rob(int[] nums) {
-
-        if (nums == null || nums.length == 0){
-            return 0;
-        }else if (nums.length == 1){
+        if (nums.length == 1){
             return nums[0];
         }else if (nums.length == 2){
-            return Math.max(nums[0], nums[1]);
+            return Math.max(nums[nums.length - 2], nums[nums.length - 1]);
         }else {
             int[] tab = new int[nums.length];
             tab[nums.length - 1] = nums[nums.length - 1];
@@ -30,7 +27,7 @@ public class Q198 {
 
     public static void main(String[] args) {
         Q198 test = new Q198();
-        int[] arr = {2, 1, 1, 2};
+        int[] arr = {1,2,3,1};
         System.out.println(test.rob(arr));
     }
 }
