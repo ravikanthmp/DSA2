@@ -10,7 +10,7 @@ public class Q200 {
         int islands = 0;
         for (int i = 0; i < grid.length; i++) {
             for (int j = 0; j < grid[0].length; j++) {
-                if (!visited[i][j]){
+                if (isValid(i, j, grid, visited)){
                     islands++;
                     dfs(i, j, grid, visited);
                 }
@@ -22,23 +22,14 @@ public class Q200 {
     private void dfs(int i, int j, char[][] grid, boolean[][] visited) {
         visited[i][j] = true;
 
-        if (isValid(i - 1, j, grid, visited)) {
-          dfs(i - 1, j, grid, visited);
-        }
+        int[][] directions = {{-1, 0}, {1, 0}, {0, -1}, {0, 1}};
 
-        if (isValid(i + 1, j, grid, visited)) {
-            dfs(i + 1, j, grid, visited);
-
-        }
-
-        if (isValid(i, j - 1, grid, visited)) {
-
-            dfs(i, j - 1, grid, visited);
-        }
-
-        if (isValid(i, j + 1, grid, visited)) {
-
-            dfs(i, j + 1, grid, visited);
+        for (int[] direction : directions) {
+            int i2 = i + direction[0];
+            int j2 = j + direction[1];
+            if (isValid(i2, j2, grid, visited)){
+                dfs(i2, j2, grid, visited);
+            }
         }
     }
 
