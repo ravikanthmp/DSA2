@@ -5,13 +5,13 @@ public class Q55 {
 
     public boolean canJump(int[] nums) {
 
-        int leftmostIndexThatCanReach = nums.length -1 ;
+        int leftMost = nums.length - 1;
         for (int i = nums.length - 2; i >= 0; i--) {
-            if (i + nums[i] >= leftmostIndexThatCanReach){
-                leftmostIndexThatCanReach = i;
+            if (nums[i] + i >= leftMost){
+                leftMost = i;
             }
         }
-        return leftmostIndexThatCanReach == 0;
+        return leftMost == 0;
     }
 
     public static void main(String[] args) {
