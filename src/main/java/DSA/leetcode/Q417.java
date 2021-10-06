@@ -29,24 +29,77 @@ public class Q417 {
         }
     }
 
-    private Map<Point, Set<DestReached>> memo;
     private Set<Point> visited;
 
     public List<List<Integer>> pacificAtlantic(int[][] heights) {
         this.heights = heights;
         visited = new HashSet<>();
+
         List<List<Integer>> results = new ArrayList<>();
 
-        for (int i = 0; i < heights.length; i++) {
-            for (int j = 0; j < heights[0].length; j++) {
-                Set<DestReached> check = check(i, j);
-                if (check.contains(DestReached.PACIFIC) && check.contains(DestReached.ATLANTIC)){
-                    results.add(List.of(i, j));
-                }
-            }
+        Set<Point> reachableFromPacific = new HashSet<>();
+        bfs(pacificInit(), reachableFromPacific);
+
+        visited = new HashSet<>();
+
+        Set<Point> reachableFromAtlantic = new HashSet<>();
+        bfs(atlanticInit(), reachableFromAtlantic);
+
+        reachableFromAtlantic.retainAll(reachableFromPacific);
+
+        for (Point point : reachableFromAtlantic) {
+            results.add(List.of(point.r, point.c));
         }
 
         return results;
+    }
+
+    private List<Point> pacificInit(){
+        List<Point> pacificInit = new LinkedList<>();
+        for (int i = 0; i < heights[0].length; i++) {
+            pacificInit.add(new Point(0, i));
+        }
+        for (int i = 0; i < heights.length; i++) {
+            pacificInit.add(new Point(i, 0));
+        }
+
+        return pacificInit;
+    }
+
+
+    private List<Point> atlanticInit(){
+        List<Point> atlanticInit = new LinkedList<>();
+        for (int i = 0; i < heights[0].length; i++) {
+            atlanticInit.add(new Point(heights.length- 1, i));
+        }
+        for (int i = 0; i < heights.length; i++) {
+            atlanticInit.add(new Point(i, heights[0].length - 1));
+        }
+
+        return atlanticInit;
+    }
+
+    private Set<Point> bfs(List<Point> initPoints, Set<Point> reachable){
+        Queue<Point> queue = new LinkedList<>();
+        queue.addAll(initPoints);
+
+        while (!queue.isEmpty()){
+            int size = queue.size();
+            for (int i = 0; i < size; i++) {
+                Point removedPoint = queue.remove();
+                reachable.add(removedPoint);
+                for (Point neighbour : neighbours(removedPoint)) {
+                    if (!visited.contains(neighbour)){
+                        queue.add(neighbour);
+                        visited.add(neighbour);
+                    }
+                }
+
+            }
+
+        }
+
+        return reachable;
     }
 
     private Set<DestReached> check(int i, int j) {
@@ -140,7 +193,7 @@ public class Q417 {
     }
 
     private boolean canFlow(Point p1, Point p2){
-        return heights[p1.r][p1.c] >= heights[p2.r][p2.c];
+        return heights[p1.r][p1.c] <= heights[p2.r][p2.c];
     }
 
     public static void main(String[] args) {

@@ -5,81 +5,101 @@ import java.util.stream.IntStream;
 
 public class Q128 {
 
-
-    class UF{
-        int[] parent;
+    class UF {
+        Map<Integer, Integer> map = new HashMap<>();
+        int[] comp;
         int[] size;
+        private int[] arr;
 
-        public UF(int N) {
-            this.parent = new int[N];
-            this.size = new int[N];
+        public UF(int[] arr) {
+            this.arr = arr;
 
-            IntStream.range(0, N).forEach(i -> parent[i] = i);
-            Arrays.fill(size, 1);
-        }
-
-        public void union(int i, int j){
-            int iComponent = find(i);
-            int jComponent = find(j);
-            if (iComponent != jComponent){
-                int sizeI = size(iComponent);
-                int sizeJ = size(jComponent);
-
-                if (sizeI >= sizeJ){
-                    parent[jComponent] = iComponent;
-                    size[iComponent] += sizeJ;
-                }else {
-                    parent[iComponent] = jComponent;
-                    size[jComponent] += sizeI;
+            int j = 0;
+            for (int i = 0; i < arr.length; i++) {
+                if (!map.containsKey(arr[i])){
+                    map.put(arr[i], j++);
                 }
+            }
+
+            comp = new int[map.size()];
+            size = new int[map.size()];
+
+            for (int i = 0; i < comp.length; i++) {
+                comp[i] = i;
+                size[i] = 1;
             }
         }
 
-        public int find(int i){
-            while (parent[i] != i){
-                parent[i] = parent[parent[i]];
-                i = parent[i];
+        public int find(int num) {
+            int i = map.get(num);
+            while (i != comp[i]) {
+                comp[i] = comp[comp[i]];
+                i = comp[i];
             }
             return i;
         }
 
-        public int size(int i){
-            return size[i];
+        private int size(int idx) {
+            return size[idx];
+        }
+
+        public void union(int i, int j) {
+            int iComp = find(i);
+            int jComp = find(j);
+            if (iComp != jComp) {
+                if (size(iComp) >= size(jComp)) {
+                    comp[jComp] = iComp;
+                    size[iComp] += size[jComp];
+                } else {
+                    comp[iComp] = jComp;
+                    size[jComp] += size[iComp];
+                }
+            }
+        }
+
+        public int largestComponent() {
+
+            int maxSoFar = 0;
+            for (int i = 0; i < comp.length; i++) {
+                if (comp[i] == i){
+                    maxSoFar = Math.max(maxSoFar, size[i]);
+                }
+            }
+            return maxSoFar;
         }
     }
 
+
+    /*
+    T(N) = O(N(lg*N))
+    S(N) = O(N)
+     */
     public int longestConsecutive(int[] nums) {
+
         if (nums == null || nums.length == 0){
             return 0;
         }
 
-        UF uf = new UF(nums.length);
-        Map<Integer, Integer> componentMap = new HashMap<>();
-        IntStream.range(0, nums.length).forEach(i -> componentMap.put(nums[i], i));
-        int maxLength = 0;
-        for (int num : nums){
-            int comp1 = componentMap.get(num);
-            if (componentMap.containsKey(num + 1)){
-                int comp2 = componentMap.get(num + 1);
-                uf.union(comp1, comp2);
-                maxLength = Math.max(uf.size(uf.find(comp2)), maxLength);
-                componentMap.put(num, uf.find(comp1));
-                componentMap.put(num + 1, uf.find(comp2));
+        Arrays.sort(nums);
+        int maxSoFar = 1;
+        int currChainLength = 1;
+        for (int i = 1; i < nums.length; i++) {
+            if ((nums[i] == nums[i -1])){
+                continue;
+            }else if ((nums[i] == nums[i - 1] + 1)){
+              currChainLength++;
             }
-            if (componentMap.containsKey(num - 1)){
-                int comp2 = componentMap.get(num - 1);
-                uf.union(comp1, comp2);
-                maxLength = Math.max(uf.size(uf.find(comp2)), maxLength);
-                componentMap.put(num, uf.find(comp1));
-                componentMap.put(num - 1, uf.find(comp2));
+            else {
+                currChainLength = 1;
             }
-            maxLength = Math.max(uf.size(uf.find(comp1)), maxLength);
+            maxSoFar = Math.max(maxSoFar, currChainLength);
         }
-        return maxLength;
+        return maxSoFar;
     }
 
+
     public static void main(String[] args) {
-        int[] arr = {0,3,7,2,5,8,4,6,0,1};
+        int[] arr = {0, 3, 7, 2, 5, 7, 4, 6, 0, 1};
         Q128 test = new Q128();
         System.out.println(test.longestConsecutive(arr));
     }
