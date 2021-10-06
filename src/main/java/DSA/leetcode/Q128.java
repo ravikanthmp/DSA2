@@ -70,6 +70,10 @@ public class Q128 {
     }
 
 
+    /*
+    T(N) = O(N(lg*N))
+    S(N) = O(N)
+     */
     public int longestConsecutive(int[] nums) {
         Set<Integer> set = new HashSet<>();
         for (int num : nums) {
