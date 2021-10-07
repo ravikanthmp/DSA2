@@ -1,46 +1,38 @@
 package DSA.leetcode;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.PriorityQueue;
-import java.util.Stack;
+import java.util.*;
 
 public class Q56 {
     public int[][] merge(int[][] intervals) {
         // 1. Init PQ
-        PriorityQueue<Interval> minPQ = new PriorityQueue<>();
+        Comparator<Interval> cmp = Comparator.comparingInt(i -> i.start);
+
+        PriorityQueue<Interval> minPQ = new PriorityQueue<>(cmp);
         for (int[] interval : intervals) {
             minPQ.add(new Interval(interval[0], interval[1]));
         }
 
-        // 2. Squash conflicting intervals
-        List<Interval> list = new ArrayList<>();
+        Stack<Interval> stack = new Stack<>();
+        stack.push(minPQ.remove());
         while (!minPQ.isEmpty()){
-            Interval smallest = minPQ.remove();
-            if (list.isEmpty()){
-                list.add(smallest);
+            Interval toBeAdded = minPQ.remove();
+            if (stack.peek().intersects(toBeAdded)){
+                stack.push(stack.pop().merge(toBeAdded));
             }else {
-                Interval last = list.remove(list.size() - 1);
-                if (last.intersects(smallest)){
-                    Interval merged = last.merge(smallest);
-                    list.add(merged);
-                }else {
-                    list.add(last);
-                    list.add(smallest);
-                }
+                stack.add(toBeAdded);
             }
         }
 
-        int[][] ans = new int[list.size()][];
+        int[][] res = new int[stack.size()][];
         int i = 0;
-        for (Interval el : list){
-            ans[i++] = new int[]{el.start, el.end};
+        for (Interval interval : stack) {
+            res[i++] = new int[]{interval.start, interval.end};
         }
-        return ans;
+        return res;
+
     }
 
-    class Interval implements Comparable<Interval>{
-
+    class Interval{
         int start;
         int end;
 
@@ -49,21 +41,15 @@ public class Q56 {
             this.end = end;
         }
 
-        @Override
-        public int compareTo(Interval o) {
-            return Integer.compare(this.start, o.start);
-        }
-
         public boolean intersects(Interval other){
-            Interval sooner;
-            Interval later;
-            sooner = Integer.compare(this.end, other.end) <= 0 ? this : other;
-            later = this == sooner ? other : this;
-            return sooner.end >= later.start && sooner.end <= later.end;
+            Interval sooner = start <= other.start ? this : other;
+            Interval later = (sooner == this) ? other : this;
+            return later.end <= sooner.end;
         }
 
         public Interval merge(Interval other){
-            return new Interval(Math.min(start, other.start), Math.max(end, other.end)) ;
+            return new Interval(Math.min(start, other.start),
+                                Math.max(end, other.end));
         }
     }
 
