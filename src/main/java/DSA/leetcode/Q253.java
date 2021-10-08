@@ -1,41 +1,34 @@
 package DSA.leetcode;
 
 import java.util.Arrays;
+import java.util.Comparator;
+import java.util.PriorityQueue;
 
 public class Q253 {
-    public int minMeetingRooms(int[][] intervals) {
 
-        if (intervals == null || intervals.length == 0) {
+    /**
+     * T(N) : O(NlgN)
+     * O(N) : O(N)
+     */
+    public int minMeetingRooms(int[][] intervals) {
+        if(intervals == null || intervals.length == 0){
             return 0;
         }
-        int[] startEvents = new int[intervals.length];
-        int[] endEvents = new int[intervals.length];
+        int[][] copyOfIntervals = Arrays.copyOf(intervals, intervals.length);
+        Arrays.sort(copyOfIntervals, Comparator.comparingInt(x -> x[0]));
 
-        int i = 0;
-        for (int[] interval : intervals) {
-            startEvents[i] = interval[0];
-            endEvents[i] = interval[1];
-            i++;
-        }
-
-        Arrays.sort(startEvents);
-        Arrays.sort(endEvents);
-
-        int startIndex = 0;
-        int endIndex = 0;
+        PriorityQueue<int[]> pq = new PriorityQueue<>(Comparator.comparingInt(x -> x[1]));
         int maxSoFar = Integer.MIN_VALUE;
-        while (endIndex < endEvents.length || startIndex < startEvents.length) {
-
-            if (endIndex == endEvents.length) {
-                startIndex++;
-            } else if (startIndex == startEvents.length) {
-                endIndex++;
-            } else if (endEvents[endIndex] <= startEvents[startIndex]) {
-                endIndex++;
-            } else {
-                startIndex++;
+        for (int[] interval : copyOfIntervals) {
+            if (pq.isEmpty()){
+                pq.add(interval);
+            }else if (interval[0] >= pq.peek()[1]){
+                pq.remove();
+                pq.add(interval);
+            }else {
+                pq.add(interval);
             }
-            maxSoFar = Math.max(maxSoFar, startIndex - endIndex);
+            maxSoFar = Math.max(maxSoFar, pq.size());
         }
         return maxSoFar;
     }
