@@ -1,41 +1,30 @@
 package DSA.leetcode;
 
-import java.util.Arrays;
-import java.util.Comparator;
+import java.util.*;
 
 public class Q435 {
 
     public int eraseOverlapIntervals(int[][] intervals) {
 
-        int[] tab = new int[intervals.length];
-        tab[intervals.length - 1] = 1;
+        // sort by finishing times
+        PriorityQueue<int[]> pq = new PriorityQueue<>(Comparator.comparingInt(a -> a[1]));
+        Collections.addAll(pq, intervals);
 
-        Arrays.sort(intervals, Comparator.comparingInt(interval -> interval[0]));
+        LinkedList<int[]> list = new LinkedList<>();
 
-        for (int i = intervals.length - 2; i >= 0; i--) {
-
-            int[] curr = intervals[i];
-
-            int ans = 1;
-            int j;
-            for ( j = i + 1; j < intervals.length; j++) {
-                int[] interval = intervals[j];
-                if (interval[0] >= curr[1]){
-                    break;
-                }else {
-                    ans = Math.max(ans, tab[j]);
-                }
-            }
-            if (j != intervals.length){
-                tab[i] = Math.max(1 + tab[j], ans);
-            }else {
-                tab[i] = ans;
+        while (!pq.isEmpty()){
+            int[] first = pq.remove();
+            if (list.isEmpty() || !intersects(list.getLast(), first)){
+                list.add(first);
             }
         }
 
-        return intervals.length - tab[0];
+        return intervals.length - list.size();
 
+    }
 
+    private boolean intersects(int[] a, int[] b){
+        return b[0] < a[1];
     }
 
     public static void main(String[] args) {
