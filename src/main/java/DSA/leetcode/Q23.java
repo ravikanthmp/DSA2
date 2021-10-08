@@ -1,56 +1,33 @@
 package DSA.leetcode;
 
-import java.util.Arrays;
 import java.util.Comparator;
-
 import java.util.PriorityQueue;
 
 public class Q23 {
 
-    public class ListNode {
-        int val;
-        ListNode next;
-
-        ListNode() {
-        }
-
-        ListNode(int val) {
-            this.val = val;
-        }
-
-        ListNode(int val, ListNode next) {
-            this.val = val;
-            this.next = next;
-        }
-    }
-    
     public ListNode mergeKLists(ListNode[] lists) {
-        Comparator<ListNode> nodeComparator = Comparator.comparingInt(l -> l.val);
-        PriorityQueue<ListNode> pq = new PriorityQueue<>(nodeComparator);
 
-        // init
+        ListNode dummyHead = new ListNode(0);
+        if(lists == null || lists.length == 0){
+            return dummyHead.next;
+        }
+        ListNode prev = dummyHead;
+
+        PriorityQueue<ListNode> minPQ = new PriorityQueue<>(Comparator.comparingInt(ln -> ln.val));
         for (ListNode list : lists) {
-            if (list != null) {
-                pq.add(list);
-            }
+            minPQ.add(list);
         }
 
-        // keep removing
-        ListNode dummy = new ListNode();
-        ListNode curr = dummy;
-
-        while (!pq.isEmpty()){
-            ListNode min = pq.remove();
-            curr.next = min;
-            curr = curr.next;
-
-            if (min.next != null){
-                pq.add(min.next);
+        while (!minPQ.isEmpty()){
+            ListNode lowest = minPQ.remove();
+            prev.next = lowest;
+            if (lowest.next != null){
+                minPQ.add(lowest.next);
             }
+            prev = prev.next;
         }
 
-        return dummy.next;
+        return dummyHead.next;
     }
-
 
 }
