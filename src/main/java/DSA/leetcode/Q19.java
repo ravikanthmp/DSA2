@@ -5,59 +5,44 @@ import java.util.stream.Stream;
 
 public class Q19 {
 
-    public class ListNode {
-        int val;
-        ListNode next;
-
-        ListNode() {
-        }
-
-        ListNode(int val) {
-            this.val = val;
-        }
-
-        ListNode(int val, ListNode next) {
-            this.val = val;
-            this.next = next;
-        }
-    }
-
     public ListNode removeNthFromEnd(ListNode head, int n) {
 
+        ListNode fast = null;
+        ListNode slow = null;
+        for (int i = 0; i < n; i++) {
+            if (fast == null){
+                fast = head;
+            }else {
+                fast = fast.next;
+            }
 
-        if (Objects.isNull(head)){
-            return null;
         }
 
-        ListNode ptr1 = head;
-        ListNode ptr2 = head;
-        int gap = 0;
-        for(ptr2 = head; ptr2.next != null && gap != n; ptr2 = ptr2.next){
-            gap++;
+        while (fast.next != null){
+            fast = fast.next;
+            if (slow == null){
+                slow = head;
+            }else {
+                slow = slow.next;
+            }
         }
 
-        if (gap < n){
-            head = head.next;
+        if (slow != null){
+            slow.next = slow.next.next;
             return head;
+        }else {
+            return head.next;
         }
 
-        while (next(ptr2) != null){
-            ptr2 = next(ptr2);
-            ptr1 = next(ptr1);
-        }
-        ptr1.next = next(ptr1.next);
-        return head;
-
-
     }
 
-    private ListNode next(ListNode node){
-        return Objects.isNull(node) ? null : node.next;
-    }
-
-    private int length(ListNode node){
-        return (int) Stream.iterate(node, Objects::nonNull, curr -> curr.next).count();
-    }
+//    private ListNode next(ListNode node){
+//        return Objects.isNull(node) ? null : node.next;
+//    }
+//
+//    private int length(ListNode node){
+//        return (int) Stream.iterate(node, Objects::nonNull, curr -> curr.next).count();
+//    }
 
     public static void main(String[] args) {
 
