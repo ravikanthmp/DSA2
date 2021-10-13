@@ -6,17 +6,16 @@ import java.util.stream.Collectors;
 public class Q49 {
 
     public List<List<String>> groupAnagrams(String[] strs) {
-        Map<String, List<String>> map = new HashMap<>();
+        Map<String, List<String>> listMap = new HashMap<>();
         for (String str : strs) {
             char[] chars = str.toCharArray();
             Arrays.sort(chars);
             String key = new String(chars);
-            if (!map.containsKey(key)){
-                map.put(key, new ArrayList<>());
-            }
-            map.get(key).add(str);
+            List<String> val = listMap.getOrDefault(key, new ArrayList<>());
+            val.add(str);
+            listMap.put(key , val);
         }
-        return new ArrayList<>(map.values());
+        return new ArrayList<>(listMap.values());
     }
 
     public static void main(String[] args) {
