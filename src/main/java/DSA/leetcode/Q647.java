@@ -10,40 +10,23 @@ public class Q647 {
         if (s == null || s.isEmpty()){
             return 0;
         }else {
-            boolean[] prev = new boolean[s.length()];
-            boolean[] prevPrev = new boolean[s.length()];
 
-            // size 1
-            Arrays.fill(prevPrev, true);
-            int count = s.length();
-
-            // size 2
-            for (int i = 0; i < s.length() - 1; i++) {
-                prev[i] = (s.charAt(i) == s.charAt(i + 1));
-                if (prev[i]){
-                    count++;
-                }
+            int count = 0;
+            for (int i = 0; i < s.length(); i++) {
+                count += check(i, i, s) + check(i, i  + 1, s);
             }
-
-            for (int size = 3; size <= s.length(); size++) {
-
-                boolean[] temp = new boolean[s.length()];
-
-                for (int startIdx = 0; startIdx <= s.length() - size; startIdx++) {
-
-                    temp[startIdx] =
-                            ((s.charAt(startIdx) == s.charAt(startIdx + size - 1)) && prevPrev[startIdx + 1]);
-                    if (temp[startIdx]){
-                        count++;
-                    }
-                }
-
-                prevPrev = prev;
-                prev = temp;
-            }
-
             return count;
         }
+    }
+
+    private int check(int i, int j, String s) {
+        int count = 0;
+        while (i >= 0 && j < s.length() && s.charAt(i) == s.charAt(j)){
+            count++;
+            i--;
+            j++;
+        }
+        return count;
     }
 
     public static void main(String[] args) {
