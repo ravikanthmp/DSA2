@@ -1,54 +1,75 @@
 package DSA.leetcode;
 
-import java.util.ArrayList;
+import java.util.LinkedList;
 import java.util.List;
-import java.util.stream.Collectors;
 
 public class Q79 {
 
+
     private char[][] board;
-    private int ROWS;
-    private int COLS;
+    private String word;
+    private boolean[][] visited;
 
     public boolean exist(char[][] board, String word) {
         this.board = board;
-        this.ROWS = board.length;
-        this.COLS = board[0].length;
-
-        for (int row = 0; row < this.ROWS; ++row)
-            for (int col = 0; col < this.COLS; ++col)
-                if (this.backtrack(row, col, word, 0))
+        this.word = word;
+        this.visited = new boolean[board.length][board[0].length];
+        for (int row = 0; row < board.length; row++) {
+            for (int col = 0; col < board[0].length; col++) {
+                if (!visited[row][col] && search(row, col, 0)){
                     return true;
+                }
+            }
+        }
         return false;
     }
 
-    protected boolean backtrack(int row, int col, String word, int index) {
-        /* Step 1). check the bottom case. */
-        if (index >= word.length())
-            return true;
+    private boolean search(int row, int col, int idx) {
 
-        /* Step 2). Check the boundaries. */
-        if (row < 0 || row == this.ROWS || col < 0 || col == this.COLS
-                || this.board[row][col] != word.charAt(index))
-            return false;
+        visited[row][col] = true;
+        char curr = word.charAt(idx);
+        boolean result = false;
+        if (board[row][col] == curr){
+            if (idx == word.length() - 1){
+                return true;
+            }
+            for (int[] neighbor : neighbors(row, col)) {
+                if (!visited[neighbor[0]][neighbor[1]]){
+                    boolean subRes = search(neighbor[0], neighbor[1], idx + 1);
+                    if (subRes){
+                        result = true;
+                        break;
+                    }
+                }
+            }
 
-        /* Step 3). explore the neighbors in DFS */
-        boolean ret = false;
-        // mark the path before the next exploration
-        this.board[row][col] = '#';
-
-        int[] rowOffsets = {0, 1, 0, -1};
-        int[] colOffsets = {1, 0, -1, 0};
-        for (int d = 0; d < 4; ++d) {
-            ret = this.backtrack(row + rowOffsets[d], col + colOffsets[d], word, index + 1);
-            if (ret)
-                break;
+        }else {
+            result =  false;
         }
 
-        /* Step 4). clean up and return the result. */
-        this.board[row][col] = word.charAt(index);
-        return ret;
+        visited[row][col] = false;
+        return result;
+
     }
+
+    List<int[]> neighbors(int row, int col){
+        List<int[]> list = new LinkedList();
+        int[][] directions = { {-1, 0}, {1, 0}, {0, -1}, {0, 1}};
+        for (int[] direction : directions) {
+            int[] pt = new int[]{row + direction[0], col + direction[1]};
+            if (isValid(pt)){
+                list.add(pt);
+            }
+        }
+        return list;
+    }
+
+    private boolean isValid(int[] point){
+        int row = point[0];
+        int col = point[1];
+        return (row >= 0 && row < board.length && col >= 0 && col < board[0].length);
+    }
+
     public static void main(String[] args) {
         char[][] arr = {{'a'}};
         Q79 test = new Q79();
