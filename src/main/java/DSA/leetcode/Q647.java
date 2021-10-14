@@ -1,28 +1,33 @@
 package DSA.leetcode;
 
 
+import java.util.Arrays;
+
 public class Q647 {
 
     public int countSubstrings(String s) {
-        int res = 0;
-        for (int i = 0; i < s.length(); i++) {
-            res += palindromeCount(i, s);
+
+        if (s == null || s.isEmpty()){
+            return 0;
+        }else {
+
+            int count = 0;
+            for (int i = 0; i < s.length(); i++) {
+                count += check(i, i, s) + check(i, i  + 1, s);
+            }
+            return count;
         }
-        return res;
     }
 
-    private int palindromeCount(int i, String s) {
-        return check(i, i, s) + check(i, i + 1, s);
-    }
-
-    private int check(int left, int right, String s) {
+    private int check(int i, int j, String s) {
         int count = 0;
-        while (left >= 0 && right < s.length() && s.charAt(left--) == s.charAt(right++)){
+        while (i >= 0 && j < s.length() && s.charAt(i) == s.charAt(j)){
             count++;
+            i--;
+            j++;
         }
         return count;
     }
-
 
     public static void main(String[] args) {
         Q647 test = new Q647();

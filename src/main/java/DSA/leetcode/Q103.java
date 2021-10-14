@@ -1,6 +1,7 @@
 package DSA.leetcode;
 
 import DSA.practise.tree.binaryTree.TreeNode;
+import org.apache.tools.ant.taskdefs.modules.Link;
 
 import java.util.*;
 import java.util.stream.Collectors;
@@ -8,39 +9,38 @@ import java.util.stream.Collectors;
 public class Q103 {
 
     public List<List<Integer>> zigzagLevelOrder(TreeNode root) {
+        List<List<Integer>> res = new LinkedList<>();
 
-        Queue<TreeNode> queue = new LinkedList<>();
-        List<List<Integer>> results = new LinkedList<>();
-        queue.add(root);
+        LinkedList<TreeNode> queue = new LinkedList<>();
+        if (root != null){
+            queue.add(root);
+        }
+
         int level = 0;
+
         while (!queue.isEmpty()){
-            int size= queue.size();
-            Queue<Integer> levelItems ;
-            if (level % 2 == 0){
-                levelItems = new LinkedList();
-            }else {
-                levelItems = new ArrayDeque();
-            }
 
+            LinkedList<Integer> resLevelList = new LinkedList<>();
+            int size = queue.size();
             for (int i = 0; i < size; i++) {
-                TreeNode removed = queue.remove();
-                if (removed.left != null){
-                    queue.add(removed.left);
+                TreeNode remove = queue.remove();
+                if (level % 2 != 0){
+                    resLevelList.addFirst(remove.val);
+                }else {
+                    resLevelList.addLast(remove.val);
                 }
-                if (removed.right != null){
-                    queue.add(removed.right);
-                }
-                levelItems.add(removed.val);
-            }
 
-            List<Integer> list = new LinkedList<>();
-            for (Integer item : levelItems){
-                list.add(item);
+                if (remove.left != null){
+                    queue.add(remove.left);
+                }
+                if (remove.right != null){
+                    queue.add(remove.right);
+                }
             }
-            results.add(list);
+            res.add(resLevelList);
             level++;
         }
-        return results;
-    }
 
+        return res;
+    }
 }
