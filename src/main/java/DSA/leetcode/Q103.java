@@ -1,6 +1,7 @@
 package DSA.leetcode;
 
 import DSA.practise.tree.binaryTree.TreeNode;
+import org.apache.tools.ant.taskdefs.modules.Link;
 
 import java.util.*;
 import java.util.stream.Collectors;
@@ -19,37 +20,25 @@ public class Q103 {
 
         while (!queue.isEmpty()){
 
-            LinkedList<TreeNode> nextLevelList = new LinkedList<>();
-
-            List<Integer> resLevelList = new LinkedList<>();
-
-            while (!queue.isEmpty()){
-                if ((level % 2) != 0){
-                    TreeNode remove = queue.removeFirst();
-                    resLevelList.add(remove.val);
-                    if (remove.left != null){
-                        nextLevelList.addLast(remove.left);
-                    }
-                    if (remove.right != null){
-                        nextLevelList.addLast(remove.right);
-                    }
-
+            LinkedList<Integer> resLevelList = new LinkedList<>();
+            int size = queue.size();
+            for (int i = 0; i < size; i++) {
+                TreeNode remove = queue.remove();
+                if (level % 2 != 0){
+                    resLevelList.addFirst(remove.val);
                 }else {
-                    TreeNode remove = queue.removeLast();
-                    resLevelList.add(remove.val);
-                    if (remove.right != null){
-                        nextLevelList.addFirst(remove.right);
-                    }
-                    if (remove.left != null){
-                        nextLevelList.addFirst(remove.left);
-                    }
+                    resLevelList.addLast(remove.val);
+                }
 
+                if (remove.left != null){
+                    queue.add(remove.left);
+                }
+                if (remove.right != null){
+                    queue.add(remove.right);
                 }
             }
-
-            level++;
             res.add(resLevelList);
-            queue = nextLevelList;
+            level++;
         }
 
         return res;
