@@ -1,80 +1,76 @@
 package DSA.leetcode;
 
+
 import java.util.Arrays;
 import java.util.Objects;
 
 public class Q208 {
 
-    class Node{
-        Node[] children = new Node[128];
-        boolean hasWord;
-
-        public void setHasWord(boolean val){
-            this.hasWord = val;
-        }
-
-        public boolean hasChild(char c){
-            return children[c] != null;
-        }
-
-        public Node getChild(char c){
-             return children[c];
-        }
+    static class Node{
+        Node[] children = new Node[26];
+        boolean val;
     }
 
-    class Trie {
+    static class Trie {
 
         Node root;
 
-        /** Initialize your data structure here. */
         public Trie() {
             root = new Node();
         }
 
-        /** Inserts a word into the trie. */
         public void insert(String word) {
-            Node curr =  root;
+
+            Node curr = root;
             for (int i = 0; i < word.length(); i++) {
-                char currChar = word.charAt(i);
-                if (!curr.hasChild(currChar)){
-                    curr.children[currChar] = new Node();
+                char c = word.charAt(i);
+                if (curr.children[c - 'a'] == null){
+                    curr.children[c - 'a'] = new Node();
                 }
-                curr = curr.getChild(currChar);
+                curr = curr.children[c - 'a'];
             }
-            curr.hasWord = true;
+            curr.val = true;
         }
 
-        /** Returns if the word is in the trie. */
         public boolean search(String word) {
             Node curr = root;
             for (int i = 0; i < word.length(); i++) {
-                char currChar = word.charAt(i);
-                if (!curr.hasChild(currChar)){
+                char c = word.charAt(i);
+                if (curr.children[c - 'a'] == null){
                     return false;
                 }else {
-                    curr = curr.getChild(currChar);
+                    curr = curr.children[c - 'a'];
                 }
             }
-           return curr.hasWord;
+            return curr.val;
         }
 
-        /** Returns if there is any word in the trie that starts with the given prefix. */
         public boolean startsWith(String prefix) {
             Node curr = root;
             for (int i = 0; i < prefix.length(); i++) {
-                char currChar = prefix.charAt(i);
-                if (!curr.hasChild(currChar)){
+                char c = prefix.charAt(i);
+                if (curr.children[c - 'a'] == null){
                     return false;
-                }else {
-                    curr = curr.getChild(currChar);
+                }else{
+                    curr = curr.children[c - 'a'];
                 }
             }
-            if (curr.hasWord){
-                return true;
-            }else {
-                return Arrays.stream(curr.children).anyMatch(Objects::nonNull);
-            }
+
+            return curr.val ||
+                    Arrays.stream(curr.children).anyMatch(Objects::nonNull);
+
         }
     }
 
+
+    public static void main(String[] args) {
+        Q208 test = new Q208();
+        Trie trie = new Trie();
+        trie.insert("apple");
+        System.out.println(trie.search("apple"));   // return True
+        System.out.println(trie.search("app"));     // return False
+        trie.startsWith("app"); // return True
+        trie.insert("app");
+        trie.search("app");
+    }
 }

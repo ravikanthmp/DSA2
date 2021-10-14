@@ -1,30 +1,41 @@
 package DSA.leetcode;
 
+import java.util.Stack;
 import DSA.practise.tree.binaryTree.TreeNode;
 
 public class Q98 {
 
     public boolean isValidBST(TreeNode root) {
 
-        if (root == null){
-            return true;
-        }else {
-            return isValid(root, null, null);
+        Stack<TreeNode> stack = new Stack<>();
+        TreeNode curr = root;
+        while (curr != null){
+            stack.push(curr);
+            curr = curr.left;
         }
-    }
+        TreeNode prev = null;
+        while (!stack.isEmpty()){
+            curr = stack.pop();
 
-    private boolean isValid(TreeNode root, Integer minValue, Integer maxValue) {
-        if (root == null){
-            return true;
-        }else {
-            boolean greater = (minValue == null || (root.val > minValue));
-            boolean less = ((maxValue == null) || (root.val < maxValue) );
-            if (greater & less){
-                return isValid(root.left, minValue, root.val) && isValid(root.right, root.val, maxValue);
+            if (prev != null){
+                if (curr.val <= prev.val){
+                    return false;
+                }
+                prev = curr;
             }else {
-                return false;
+                prev = curr;
+            }
+
+            if (curr.right != null){
+                curr = curr.right;
+                while(curr != null){
+                    stack.push(curr);
+                    curr = curr.left;
+                }
             }
         }
+
+        return true;
     }
 
 }

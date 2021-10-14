@@ -4,52 +4,32 @@ import DSA.practise.tree.binaryTree.TreeNode;
 
 public class Q230 {
 
-    class ResultWrapper{
-        TreeNode result;
-        int count;
+    class ResultHolder{
+        int currK;
+        boolean finished = false;
+        int result;
 
-        public int getCount() {
-            return count;
-        }
-
-        public void setResult(TreeNode res){
-           this.result = res;
-       }
-
-        public TreeNode getResult() {
-            return result;
-        }
-
-       public void increment(){
-           this.count++;
-       }
-
-        public boolean hasResult(){
-           return result != null;
+        public boolean isDone(){
+            return finished;
         }
     }
-
     public int kthSmallest(TreeNode root, int k) {
-        ResultWrapper resultWrapper = new ResultWrapper();
-        kthSmallestHelper(root, k, resultWrapper);
-        return resultWrapper.getResult().val;
+        ResultHolder resultHolder = new ResultHolder();
+        visit(root, k, resultHolder);
+        return resultHolder.result;
     }
 
-    private void kthSmallestHelper(TreeNode root, int k, ResultWrapper holder) {
-        if (root != null && !holder.hasResult()) {
-            // left
-            kthSmallestHelper(root.left, k, holder);
-
-            // this one
-            if (!holder.hasResult()){
-                holder.increment();
-                if (holder.getCount() == k){
-                    holder.setResult(root);
+    private void visit(TreeNode root, int k, ResultHolder resultHolder) {
+        if (root != null){
+            visit(root.left, k, resultHolder);
+            if (!resultHolder.isDone()){
+                resultHolder.currK++;
+                if (resultHolder.currK == k){
+                    resultHolder.finished = true;
+                    resultHolder.result = root.val;
                 }
+                visit(root.right, k, resultHolder);
             }
-
-            // right
-            kthSmallestHelper(root.right, k, holder);
         }
     }
 
