@@ -1,11 +1,8 @@
 package DSA.leetcode.topInterview.easy;
 
-import java.util.Objects;
-import java.util.stream.Stream;
-
 public class RemoveNthFromEnd {
 
-    class ListNode {
+    static class ListNode {
 
         int val;
         ListNode next;
@@ -16,23 +13,30 @@ public class RemoveNthFromEnd {
         }
 
     }
-    
-    
-    
-    public ListNode removeNthFromEnd(ListNode head, int n) {
 
-        int size = (int) Stream.iterate(head, Objects::nonNull, curr -> curr.next).count();
-        ListNode curr = head;
-        if (n == size){
-            return head.next;
-        }else {
-            for (int i = 0; i < size - n - 1; i++) {
-                curr = curr.next;
-            }
-            curr.next = curr.next.next;
-            return head;
+    public ListNode removeNthFromEnd(ListNode head, int n) {
+        ListNode dummy = new ListNode(0);
+        dummy.next = head;
+        ListNode fast = dummy;
+        ListNode slow = dummy;
+        int gap = 0;
+        while (gap < n){
+            fast = fast.next;
+            gap++;
+        }
+        while (fast.next != null){
+            fast = fast.next;
+            slow = slow.next;
         }
 
+        slow.next = slow.next.next;
+        return dummy.next;
     }
-    
+
+    public static void main(String[] args) {
+        ListNode head = new ListNode(1);
+        RemoveNthFromEnd test = new RemoveNthFromEnd();
+        System.out.println(test.removeNthFromEnd(head, 1));
+    }
+
 }
