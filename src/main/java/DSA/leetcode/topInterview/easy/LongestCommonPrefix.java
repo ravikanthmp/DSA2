@@ -3,6 +3,10 @@ package DSA.leetcode.topInterview.easy;
 import java.util.Arrays;
 import java.util.Objects;
 
+/**
+ * T(N) = O(m*n) + O(prefix)
+ * S(N) = O(m*n)
+ */
 public class LongestCommonPrefix {
 
     static class Node<V>{
