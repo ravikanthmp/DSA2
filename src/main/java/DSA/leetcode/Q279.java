@@ -16,11 +16,8 @@ public class Q279 {
             }
         }
 
-
-        TreeSet<Integer> visited = new TreeSet<>();
-        Queue<Integer> queue = new LinkedList<>();
-        queue.addAll(S);
-        visited.addAll(S);
+        Queue<Integer> queue = new LinkedList<>(S);
+        TreeSet<Integer> visited = new TreeSet<>(S);
 
         int step = 1;
         while (!queue.isEmpty()){
@@ -40,7 +37,6 @@ public class Q279 {
             }
             step++;
         }
-
         return Integer.MAX_VALUE;
     }
 
