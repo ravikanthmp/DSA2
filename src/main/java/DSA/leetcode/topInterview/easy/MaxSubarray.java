@@ -5,29 +5,51 @@ import java.util.Arrays;
 public class MaxSubarray {
 
     public int maxSubArray(int[] nums) {
+        return max(nums, 0, nums.length - 1);
+    }
 
-
-        int windowSum = 0;
-        int maxSoFar = 0;
-        for (int right = 0; right < nums.length; right++) {
-            windowSum += nums[right];
-            if (windowSum < 0){
-                windowSum = 0;
-            }
-            maxSoFar = Math.max(maxSoFar, windowSum);
-        }
-
-        if (maxSoFar == 0 ){
-            int elMax = Arrays.stream(nums).max().getAsInt();
-            if (elMax != 0){
-                return elMax;
-            }else {
-                return 0;
-            }
+    private int max(int[] nums, int lo, int hi){
+        if (lo > hi){
+            return 0;
+        } else if (lo == hi){
+            return nums[lo];
         }else {
-            return maxSoFar;
+            int mid = lo + (hi - lo)/2;
+            int left = max(nums, lo, mid - 1);
+            int right = max(nums, mid + 1, hi);
+
+            // across left
+            int maxAcross = nums[mid];
+
+            int currSum = 0;
+            for (int i = mid - 1; i >= 0 ; i--) {
+                if ((currSum + nums[i]) < 0){
+                    break;
+                }else {
+                    currSum += nums[i];
+                }
+            }
+            maxAcross += currSum;
+
+            currSum = 0;
+            for (int i = mid + 1; i < nums.length; i++) {
+                if ((currSum + nums[i]) < 0){
+                    break;
+                }else {
+                    currSum += nums[i];
+                }
+            }
+            maxAcross += currSum;
+
+            return Math.max(maxAcross, Math.max(left,right));
         }
     }
 
+
+    public static void main(String[] args) {
+        MaxSubarray maxSubarray = new MaxSubarray();
+        int[] arr = {-2,1,-3,4,-1,2,1,-5,4};
+        System.out.println(maxSubarray.maxSubArray(arr));
+    }
 
 }
