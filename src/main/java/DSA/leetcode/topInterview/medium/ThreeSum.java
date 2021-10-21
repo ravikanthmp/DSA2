@@ -1,64 +1,71 @@
 package DSA.leetcode.topInterview.medium;
 
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
+import java.util.*;
+import java.util.stream.Collectors;
 
 public class ThreeSum {
 
+    static class Triplet{
+        Triplet(int i, int j, int k) {
+            int[] arr = new int[3];
+            arr[0] = i;
+            arr[1] = j;
+            arr[2] = k;
+            Arrays.sort(arr);
+            this.i = arr[0];
+            this.j = arr[1];
+            this.k = arr[2];
+        }
+
+        int i;
+        int j;
+        int k;
+
+        static Triplet of(int i, int j, int k){
+            return new Triplet(i, j, k);
+        }
+
+        @Override
+        public boolean equals(Object o) {
+            if (this == o) return true;
+            if (o == null || getClass() != o.getClass()) return false;
+            Triplet triplet = (Triplet) o;
+            return i == triplet.i && j == triplet.j && k == triplet.k;
+        }
+
+        @Override
+        public int hashCode() {
+            return Objects.hash(i, j, k);
+        }
+    }
+
     public List<List<Integer>> threeSum(int[] nums) {
 
-        List<List<Integer>> res = new ArrayList<>();
+        Set<Triplet> set = new HashSet<>();
 
         if (nums == null || nums.length < 3){
-            return res;
+            return Collections.EMPTY_LIST;
         }
 
-        Arrays.sort(nums);
-
-        if (nums[nums.length - 1] < 0){
-            return res;
+        Map<Integer, Integer> map = new HashMap<>();
+        for (int i = 0; i < nums.length; i++) {
+            map.put(nums[i], i);
         }
 
-        for (int i = 0; i < nums.length && nums[i] <= 0; ) {
+        for (int i = 0; i < nums.length; i++) {
+            for (int j = i + 1; j < nums.length; j++) {
+                int required = -(nums[i] + nums[j]);
 
-            int j = i + 1;
-            int k = nums.length - 1;
-            while (j < k){
-                int sum = nums[i] + nums[j] + nums[k];
-                if (sum == 0){
-                    res.add(List.of(nums[i], nums[j], nums[k]));
+                int k = map.getOrDefault(required, i);
 
-                    j++;
-                    while (j < nums.length && nums[j] == nums[j - 1]){
-                        j++;
-                    }
-
-                    k--;
-                    while (k > j && nums[k] == nums[k + 1]){
-                        k--;
-                    }
-
-                }else if (sum < 0){
-                    j++;
-                    while (j < nums.length && nums[j] == nums[j - 1]){
-                        j++;
-                    }
-                }else {
-                    k--;
-                    while (k > j && nums[k] == nums[k + 1]){
-                        k--;
-                    }
+                if ( (k != i) && (k != j)){
+                    set.add(Triplet.of(nums[i], nums[j], nums[k]));
                 }
             }
-
-            i++;
-            while (i < nums.length && nums[i] == nums[i - 1]){
-                i++;
-            }
         }
 
-        return res;
+        return set.stream().map(triplet -> List.of(triplet.i, triplet.j, triplet.k))
+                .collect(Collectors.toList());
     }
 
     public static void main(String[] args) {
