@@ -1,36 +1,21 @@
 package DSA.leetcode.topInterview.medium;
 
-
 import java.util.Stack;
 
 public class IncreasingTriplet {
 
-
     public boolean increasingTriplet(int[] nums) {
         int[] nge = nextGreaterElement(nums);
-        int[] pse = previousSmallerElement(nums);
+        int smallestSoFar = Integer.MAX_VALUE;
         for (int i = 0; i < nums.length - 1; i++) {
-            if (nge[i] != -1 && pse[i] != -1){
+
+            if ((nge[i] != -1) && (smallestSoFar < nums[i])){
                 return true;
             }
+
+            smallestSoFar = Integer.min(smallestSoFar, nums[i]);
         }
         return false;
-    }
-
-    private int[] previousSmallerElement(int[] nums) {
-        int[] pse = new int[nums.length];
-        Stack<Integer> stack = new Stack<>();
-        for (int i = nums.length - 1; i >= 0; i--) {
-            while (!stack.isEmpty() && nums[stack.peek()] > nums[i]){
-                pse[stack.pop()] = i;
-            }
-            stack.push(i);
-        }
-
-        while (!stack.isEmpty()){
-            pse[stack.pop()] = -1;
-        }
-        return pse;
     }
 
     private int[] nextGreaterElement(int[] nums) {
