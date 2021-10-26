@@ -2,65 +2,62 @@ package DSA.leetcode.topInterview.medium;
 
 class TicTacToe {
 
+    private final int[] player1Rows;
+    private final int[] player2Rows;
+    private final int[] player1Cols;
+    private final int[] player2Cols;
+    private int n;
+    private int player1Diag;
+    private int player2Diag;
+    private int player1AntiDiag;
+    private int player2AntiDiag;
+
     char[][] board;
 
     public TicTacToe(int n) {
 
         board = new char[n][n];
-
+        this.player1Rows = new int[n];
+        this.player2Rows = new int[n];
+        this.player1Cols = new int[n];
+        this.player2Cols = new int[n];
+        this.n = n;
     }
 
     public int move(int row, int col, int player) {
         board[row][col] = (player == 1) ? 'X' : 'O';
-        return isDone(row, col, player) ? player : 0;
-    }
 
-    private boolean isDone(int row, int col, int player){
-
-        char lookingFor = (player == 1) ? 'X' : 'O';
-
-        boolean res = checkCol(col, lookingFor) || checkRow(row, lookingFor) || checkDiag(lookingFor);
-        return res;
-    }
-
-    private boolean checkRow(int row, char lookingFor){
-        // row
-        for (int n = 0; n < board[0].length; n++) {
-            if (board[row][n] != lookingFor){
-                return false;
+        if (player == 1) {
+            player1Rows[row]++;
+            player1Cols[col]++;
+            if (row == col) {
+                player1Diag++;
             }
-        }
-        return true;
-    }
-
-    private boolean checkCol(int col, char lookingFor){
-        for (int m = 0; m < board.length; m++) {
-            if (board[m][col] != lookingFor){
-                return false;
-            }
-        }
-        return true;
-    }
-
-    private boolean checkDiag(char lookingFor){
-        boolean ans = true;
-        for (int i = 0; i < board.length; i++) {
-            if (board[i][i] != lookingFor){
-                ans = false;
-                break;
-            }
-        }
-
-
-        if (!ans){
-            for (int i = 0; i < board.length; i++) {
-                if (board[i][board[0].length - 1 - i] != lookingFor){
-                    return false;
-                }
+            if (col == (board[0].length - 1 - row)) {
+                player1AntiDiag++;
             }
 
+            if (player1Rows[row] == n || player1Cols[col] == n || player1Diag == n || player1AntiDiag == n){
+                return 1;
+            }else {
+                return 0;
+            }
+        } else {
+            player2Rows[row]++;
+            player2Cols[col]++;
+            if (row == col) {
+                player2Diag++;
+            }
+            if (col == (board[0].length - 1 - row)) {
+                player2AntiDiag++;
+            }
+            if (player2Rows[row] == n || player2Cols[col] == n || player2Diag == n || player2AntiDiag == n){
+                return 1;
+            }else {
+                return 0;
+            }
         }
-
-        return true;
     }
+
+
 }
