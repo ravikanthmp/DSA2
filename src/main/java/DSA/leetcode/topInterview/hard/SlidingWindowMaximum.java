@@ -6,27 +6,52 @@ public class SlidingWindowMaximum {
 
     public int[] maxSlidingWindow(int[] nums, int k) {
 
-        List<Integer> list = new LinkedList<>();
-        Comparator<Integer> cmp= Comparator.comparingInt(i -> nums[i]);
-        PriorityQueue<Integer> maxPQ = new PriorityQueue<>(cmp.reversed());
-        for (int i = 0; i < k; i++) {
-            maxPQ.add(i);
-        }
-        list.add(maxPQ.peek());
+        int[] nge = nextGreaterElement(nums);
 
-        for (int i = k; i < nums.length; i++) {
-            maxPQ.add(i);
-            while (!maxPQ.isEmpty() && maxPQ.peek() < (i - k + 1)){
-                maxPQ.remove();
+        System.out.println(Arrays.toString(nge));
+        int[] slidingWindow = new int[nums.length - k + 1];
+
+
+        int j = 0;
+        for (int i = 0; i < slidingWindow.length; i++) {
+            if (nge[i] > i + k - 1){
+                slidingWindow[i] = nums[i];
+            }else {
+                j = Math.max(j, i);
+                int ans = j;
+                while (j <= (i + k - 1)){
+                    ans = j;
+                    j = nge[j];
+                }
+                slidingWindow[i] = nums[ans];
+                j = ans;
             }
-            list.add(maxPQ.peek());
         }
 
-        int[] res = new int[list.size()];
-        int i = 0;
-        for (Integer x : list) {
-            res[i++] = x;
+        return slidingWindow;
+    }
+
+    private int[] nextGreaterElement(int[] nums){
+        int[] nge = new int[nums.length];
+        Stack<Integer> stack = new Stack<>();
+
+        for (int i = 0; i < nums.length; i++) {
+            while (!stack.isEmpty() && nums[stack.peek()] < nums[i]){
+                nge[stack.pop()] = i;
+            }
+            stack.push(i);
         }
-        return res;
+
+        while (!stack.isEmpty()){
+            nge[stack.pop()] = nums.length;
+        }
+
+        return nge;
+    }
+
+    public static void main(String[] args) {
+        SlidingWindowMaximum test = new SlidingWindowMaximum();
+        int[] arr = {7,4,1};
+        System.out.println(Arrays.toString(test.maxSlidingWindow(arr, 2)));
     }
 }

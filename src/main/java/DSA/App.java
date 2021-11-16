@@ -3,12 +3,17 @@
  */
 package DSA;
 
+import java.util.Arrays;
+
 public class App {
     public String getGreeting() {
         return "Hello World!";
     }
 
     public static void main(String[] args) {
-        System.out.println(new App().getGreeting());
+
+        String[] s = {"1", "2", "15", "-7", "300"};
+        Arrays.sort(s);
+        System.out.println(Arrays.toString(s));
     }
 }

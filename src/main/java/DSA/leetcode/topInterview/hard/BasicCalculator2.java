@@ -35,10 +35,12 @@ public class BasicCalculator2 {
     }
     public int calculate(String s) {
 
+        int i1 = Integer.lowestOneBit(76);
+        System.out.println(i1);
         Set<Character> allowedOperators = Set.of('-', '+', '*', '/');
 
-        LinkedList<Integer> operands = new LinkedList<>();
-        LinkedList<Operator> operator = new LinkedList<Operator>();
+        Stack<Integer> operands = new Stack<>();
+        Stack<Operator> operator = new Stack<Operator>();
         Integer prevOperand = null;
         for (int i = 0; i < s.length(); i++) {
             char curr = s.charAt(i);
@@ -52,7 +54,7 @@ public class BasicCalculator2 {
                     prevOperand = null;
                 }
                 Operator oper = Operator.parse(curr);
-                if (!operator.isEmpty() &&  oper.priority <= operator.peek().priority){
+                while (!operator.isEmpty() &&  oper.priority <= operator.peek().priority){
                     Operator pop = operator.pop();
                     Integer operand2 = operands.pop();
                     Integer operand1 = operands.pop();
@@ -74,29 +76,30 @@ public class BasicCalculator2 {
             operands.push(prevOperand);
         }
 
-        if (!operator.isEmpty()){
-            if (operator.getLast().equals(Operator.DIVIDE) || operator.getLast().equals(Operator.MULTIPLY)){
-                int op2 = operands.removeLast();
-                int op1 = operands.removeLast();
-                Integer res = operator.removeLast().op.apply(op1, op2);
-                operands.addLast(res);
-            }
-        }
 
         while (operands.size() != 1){
-            Operator pop = operator.removeFirst();
-            Integer operand2 = operands.removeFirst();
-            Integer operand1 = operands.removeFirst();
+            Operator pop = operator.pop();
+            Integer operand2 = operands.pop();
+            Integer operand1 = operands.pop();
             Integer result = pop.op.apply(operand1, operand2);
-            operands.addFirst(result);
+            operands.push(result);
         }
         return operands.pop();
     }
 
 
     public static void main(String[] args) {
-        BasicCalculator2 calc = new BasicCalculator2();
-        System.out.println(calc.calculate("1*2-3/4+5*6-7*8+9/10"));
+//        BasicCalculator2 calc = new BasicCalculator2();
+//        System.out.println(calc.calculate("1-1+1"));
+        int x = 76;
+        int counter = 0;
+        while (x != 0){
+            int rsbm = Integer.lowestOneBit(x);
+            x -= rsbm;
+            counter++;
+        }
+
+        System.out.println(counter);
     }
 
 }
